@@ -1,0 +1,16 @@
+{
+  "name": "imagebank",
+  "version": "1.0.0",
+  "main": "src/web.js",
+  "scripts": {
+    "start": "node src/web.js"
+  },
+  "license": "CC0-1.0",
+  "dependencies": {
+    "express": "^4.17.1",
+    "express-busboy": "^8.0.0",
+    "nunjucks": "^3.2.1",
+    "sqlite3": "^4.2.0",
+    "uuid": "^8.0.0"
+  }
+}

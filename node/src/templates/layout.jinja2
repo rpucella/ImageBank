@@ -1,0 +1,201 @@
+{% macro imagerow (img) -%}
+
+  <div class="columns">
+    <div class="column">
+      <a href="/image/{{img['uuid']}}"><img src="{{img['link']}}" width="100%"></a>
+    </div>
+    <div class="column">
+      <div class="content">
+      {% for line in img['content'] %}
+      <p>{{line}}</p>
+      {% endfor %}
+      <div class="field">
+        <div class="control">
+	  <div class="buttons">
+    	    <a href="/edit/{{img['uuid']}}" class="button is-small is-link" id="button-edit">Edit</a>
+	    {% if img['draft'] %}
+    	    <button class="button is-small is-link ib-publish" data-uid="{{img['uuid']}}">Publish</button>
+	    {% else %}
+    	    <button class="button is-small is-link ib-draft" data-uid="{{img['uuid']}}">Draft</button>
+	    {% endif %}
+     	{% for t in img['tags'] %}
+	  <a href="/tag/{{t}}" class="button is-rounded is-small is-link is-light">{{t}}</a>
+	{% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+
+{%- endmacro %}
+  
+<!DOCTYPE html>
+<html>
+  
+  <head>
+    
+    {% if title %}
+    <title>{{title}}</title>
+    {% endif %}
+    
+    <link rel="stylesheet" href="/static/bulma.min.css">
+    
+    <style>
+      
+      h1 { font-size: 225%; }
+      h2 { font-size: 170%; }
+      h3 { font-size: 130%; }
+      body {
+        font-family: sans-serif;
+      }
+      span.logo {
+      font-weight: bold;
+      font-size: 130%;
+      font-variant: small-caps;
+      }
+      .main {
+        display: flex;
+        flex-direction: column;
+      }
+      .row {
+        flex: 1;
+        display: flex;      
+        flex-direction: row;
+        align-items: flex-start;
+        justify-items: flex-start;
+	margin-bottom: 16px;
+      }
+      .entry {
+          flex: 1;
+	  padding: 8px;
+      }
+      .entry > img {
+        width: 100%;
+      }
+
+    </style>
+    
+  </head>
+  
+  <body>
+
+    <script>
+    
+function post (endpoint, d, thenLoad) {
+
+  // Create a formdata object and add the inputs
+  var data = new FormData();
+  Object.entries(d).forEach(function(e) {
+    data.append(e[0], e[1]);
+  });
+
+  fetch(endpoint, {
+    method: 'POST',
+    body: data
+  }).then(function(response) {
+    if (response.status !== 200) { 
+      console.log('ERROR:', response.statusText);
+      console.log(response);
+      return;
+    }
+    return response.json();
+  }).then(function(json) {
+    if (typeof thenLoad === 'function') { 
+      window.location.assign(thenLoad(json));
+    } else {
+      window.location.assign(thenLoad);
+    }
+  }).catch(function(error) {
+    console.log('ERROR:', error);
+  });
+}
+
+  </script>
+
+    <nav class="navbar is-tablet" role="navigation" aria-label="main navigation">
+
+      <div class="navbar-brand">
+        <a class="navbar-item" href="/">
+          <span class='logo'>ImageBank</span>
+        </a>
+
+        <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </a>
+        
+      </div>
+      
+      <div id="navbarBasicExample" class="navbar-menu">
+	<div class="navbar-start">
+	  <a href="/recent" class="navbar-item"> Recent </a>
+	  <a href="/page" class="navbar-item"> Pages </a>
+	  <a href="/draft" class="navbar-item"> Drafts </a>
+	  <a href="/tag" class="navbar-item"> Tags </a>
+          <!-- <a href="/image" class="navbar-item"> Images </a> -->
+	  <a href="/add" class="navbar-item"> <span><img src="/static/add.svg" height="12" width="12"> Image</span> </a>
+	</div>
+	<div class="navbar-end">
+	  <a href="/kill" class="navbar-item"> Quit </a>
+	</div>
+      </div>
+    </nav>
+
+    <section class="section">
+      <div class="container">
+
+        {% block container %}
+        {% endblock %}
+
+      </div>
+    </section>
+
+    <script>
+      
+document.addEventListener('DOMContentLoaded', () => {
+
+  // Get all "navbar-burger" elements
+  const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
+
+  // Check if there are any navbar burgers
+  if ($navbarBurgers.length > 0) {
+
+    // Add a click event on each of them
+    $navbarBurgers.forEach( el => {
+      el.addEventListener('click', () => {
+
+        // Get the target from the "data-target" attribute
+        const target = el.dataset.target;
+        const $target = document.getElementById(target);
+
+        // Toggle the "is-active" class on both the "navbar-burger" and the "navbar-menu"
+        el.classList.toggle('is-active');
+        $target.classList.toggle('is-active');
+
+      });
+    });
+  }
+});
+
+document.querySelectorAll('.ib-draft').forEach(function(item) {
+  var uid = item.dataset.uid;
+  item.addEventListener('click', function() {
+    post('/post/draft', {'uid': uid}, '/image/' + uid);
+  });
+});
+        
+document.querySelectorAll('.ib-publish').forEach(function(item) {
+  var uid = item.dataset.uid;
+  item.addEventListener('click', function() { 
+    post('/post/publish', {'uid': uid}, '/image/' + uid);
+  });
+});
+    </script>
+    
+  </body>
+
+</html>
+
+

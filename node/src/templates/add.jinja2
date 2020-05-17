@@ -1,0 +1,29 @@
+{% extends "layout.jinja2" %}
+
+
+{% block container %}
+
+<div class="field">
+  <label class="label">File</label>
+  <div class="control">
+    <input class="input" type="file" placeholder="File" id="input-file">
+  </div>
+</div>
+
+<div class="field">
+  <div class="control">
+    <button class="button is-link" id="button-save">Load</button>
+  </div>
+</div>
+
+<script>
+document.getElementById('button-save').addEventListener('click', function() {
+  var files = document.getElementById('input-file').files;
+  if (files.length === 0) {
+    return;
+  }
+  post('/post/add', {file: files[0]}, function(json) { return '/edit/' + json.uid; });
+});
+</script>
+
+{% endblock %}

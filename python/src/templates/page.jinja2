@@ -1,0 +1,13 @@
+{% extends "layout.jinja2" %}
+
+
+{% block container %}
+
+<h1>{{pagetitle}}</h1>
+
+  {% for img in images %}
+    {{ imagerow(img) }}  
+  {% endfor %}
+
+{% endblock %}
+    

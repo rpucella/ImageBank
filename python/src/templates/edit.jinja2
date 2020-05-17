@@ -1,0 +1,76 @@
+{% extends "layout.jinja2" %}
+
+
+{% block container %}
+
+<div class="columns">
+  
+  <div class="column is-one-quarter">
+    <img src="{{image['link']}}" width="100%">
+  </div>
+
+  <div class="column">
+  
+    <div class="field">
+      <div class="control">
+        <textarea class="textarea" rows="12" id="input-text">{{image['text']}}</textarea>
+      </div>
+    </div>
+  
+    <div class="field">
+      <div class="control">
+      <div class="buttons" id="ib-tags">
+        <button class="button is-link" id="button-save">Save</button>
+	<button class="button is-link" id="button-add">Add Tag</button>
+      {% for t in image['tags'] %}
+      <span data-tag="{{t}}" class="button is-static is-rounded is-light ib-tag">{{t}}&nbsp;&nbsp;<button data-for="{{t}}" class="delete ib-delete"></button> </span>
+      {% endfor %}
+      </div>
+      </div>
+    </div>
+    
+  </div>
+</div>
+
+<script>
+document.getElementById('button-save').addEventListener('click', function() {
+  var text = document.getElementById('input-text').value;
+  var uid = '{{ image['uuid'] }}';
+  var tags = [];
+  document.querySelectorAll('.ib-tag').forEach(function(item) {
+    tags.push(item.dataset.tag);
+  });
+  post('/post/edit', {uid: uid, text: text, tags: tags.join(' ;; ')}, '/image/' + uid);
+});
+
+function attachListener (item) {
+  item.addEventListener('click', function() {
+    var tag = document.querySelector('.ib-tag[data-tag="' + item.dataset.for + '"]')
+    tag.parentNode.removeChild(tag);
+  });
+}
+
+document.querySelectorAll('.ib-delete').forEach(attachListener);
+
+document.getElementById('button-add').addEventListener('click', function() {
+  var newtag = window.prompt('Tag to add:').trim();
+  // make sure it doesn't already exist
+  var seen = false;
+  document.querySelectorAll('.ib-tag').forEach(function(item) {
+    if (item.dataset.tag === newtag) {
+      seen = true;
+    }
+  });
+  if (!newtag || seen) {
+    return;
+  }
+  var e = document.createElement('div');
+  e.innerHTML = '<span data-tag="' + newtag + '" class="button is-static is-rounded is-light ib-tag">' + newtag + '&nbsp;&nbsp;<button data-for="' + newtag + '" class="delete ib-delete"></button> </span>';
+  var ee = e.firstChild;
+  attachListener(ee.querySelector('.ib-delete'));
+  document.getElementById('ib-tags').appendChild(ee);
+});
+
+</script>
+
+{% endblock %}
