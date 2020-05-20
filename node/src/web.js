@@ -24,9 +24,21 @@ app.get('/recent', async (req, res) => {
     res.send(nunjucks.render('recent.jinja2', {images: results}));
 });
 
-app.get('/draft', async (req, res) => {
-    const results = await imagebank.drafts(_FOLDER);
-    res.send(nunjucks.render('draft.jinja2', {images: results}));
+app.get('/draft/', async (req, res) => {
+    res.redirect('/draft/1');
+});
+
+app.get('/draft/:p', async (req, res) => {
+    const p = parseInt(req.params.p) || 0;
+    if (p < 1) {
+	res.redirect('/page');
+    }
+    else {
+	const count = await imagebank.count_drafts(_FOLDER);
+	const results = await imagebank.drafts(_FOLDER, p);
+	const total_pages = Math.trunc((count - 1) / 10) + 1;
+	res.send(nunjucks.render('page.jinja2', { pagetitle: `Drafts`, images: results, page: p, total: total_pages, base: 'draft'}));
+    }
 });
 
 app.get('/page', (req, res) => {
@@ -38,9 +50,11 @@ app.get('/page/:p', async (req, res) => {
     if (p < 1) {
 	res.redirect('/page');
     }
-    else { 
+    else {
+	const count = await imagebank.count(_FOLDER);
 	const results = await imagebank.page(_FOLDER, p);
-	res.send(nunjucks.render('page.jinja2', { pagetitle: `Page ${p}`, images: results}));
+	const total_pages = Math.trunc((count - 1) / 10) + 1;
+	res.send(nunjucks.render('page.jinja2', { pagetitle: `Published`, images: results, page: p, total: total_pages, base: 'page'}));
     }
 });
 
@@ -57,11 +71,13 @@ app.get('/tag/:tag/:p', async (req, res) => {
     const tag = req.params.tag || '';
     const p = parseInt(req.params.p) || 0;
     if (p < 1) {
-	res.redirect('/page');
+	res.redirect('/tag/' + tag);
     }
     else { 
+	const count = await imagebank.count_tag(_FOLDER, tag);
 	const results = await imagebank.tag(_FOLDER, tag, p);
-	res.send(nunjucks.render('page.jinja2', { pagetitle: `${tag} — Page ${p}`, images: results}));
+	const total_pages = Math.trunc((count - 1) / 10) + 1;
+	res.send(nunjucks.render('page.jinja2', { pagetitle: `Tag — ${tag}`, images: results, page: p, total: total_pages, base: `tag/${tag}`}));
     }
 });
 
