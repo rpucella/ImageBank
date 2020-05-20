@@ -32,8 +32,9 @@ async function recent (folder) {
     return results;
 }
 
-async function drafts (folder) { 
-    const results = await new dal.Images(folder).read_all_drafts()
+async function drafts (folder, p) { 
+    const offset = (p - 1) * 10
+    const results = await new dal.Images(folder).read_all_drafts(offset, 10)
     const tags = await new dal.Tags(folder).read_by_uuids(results.map(r => r.uuid));
     const dtags = group_tags_by_uuid(tags);
     for (let r of results) {
@@ -41,6 +42,21 @@ async function drafts (folder) {
         inject_tags(r, dtags);
     }
     return results;
+}
+
+async function count (folder) {
+    const count = await new dal.Images(folder).count_all();
+    return count.ct;
+}
+
+async function count_drafts (folder) {
+    const count = await new dal.Images(folder).count_all_drafts();
+    return count.ct;
+}
+
+async function count_tag (folder, tag) {
+    const count = await new dal.Images(folder).count_all_by_tag(tag);
+    return count.ct;
 }
 
 async function page (folder, p) {
@@ -149,6 +165,9 @@ module.exports = {
     tags_all: tags_all,
     tag: tag,
     image: image,
+    count: count,
+    count_tag: count_tag,
+    count_drafts: count_drafts,
     edit: edit,
     edit_image: edit_image,
     add_image: add_image,

@@ -297,6 +297,20 @@ class Images {
 	return rows[0];
     }
 
+    async count_all_drafts () {
+	this._connect();
+	const rows = await this._run(`SELECT count(*) as ct FROM images WHERE draft = 1`);
+	this._close();
+	return rows[0];
+    }
+
+    async count_all_by_tag (tag) {
+	this._connect();
+	const rows = await this._run(`SELECT count(*) as ct FROM images WHERE uuid IN (SELECT uuid FROM tags WHERE tag = ?) AND draft = 0`, [tag]);
+	this._close();
+	return rows[0];
+    }
+
     async read_all (offset, limit) {
 	if (offset === 'undefined') {
 	    offset = 0;
@@ -325,9 +339,15 @@ class Images {
 	return results;
     }
 
-    async read_all_drafts () {
+    async read_all_drafts (offset, limit) {
+	if (offset === 'undefined') {
+	    offset = 0;
+	}
+	if (limit === 'undefined') {
+	    limit = 10;
+	}
 	this._connect();
-	let results = await this._run(`SELECT * FROM images WHERE draft = 1 ORDER BY datetime(timestamp) desc`);
+	let results = await this._run(`SELECT * FROM images WHERE draft = 1 ORDER BY datetime(timestamp) desc LIMIT ? OFFSET ?`, [limit, offset]);
 	results = results.map(r => this._process_row(r));
 	this._close();
 	return results;
