@@ -56,14 +56,6 @@ class Version {
 	}
     }
 
-    async create_table () {
-	this._connect();
-	await this._run(`CREATE TABLE IF NOT EXISTS version ( 
-                     version int 
-                  )`);
-	this._close();
-    }
-
     async create (desc) {
         this._connect();
 	const results = await this._run(`SELECT * FROM version LIMIT 1`, []);
@@ -128,15 +120,6 @@ class Tags {
 		});
 	    });
 	}
-    }
-
-    async create_table () {
-	this._connect();
-	await this._run(`CREATE TABLE IF NOT EXISTS tags (
-                       uuid text,
-                       tag text
-                     )`);
-	this._close();
     }
 
     async create (desc) {
@@ -220,20 +203,6 @@ class Images {
 	    });
 	}
     }
-
-    async create_table () {
-	this._connect();
-	await this._run(`CREATE TABLE IF NOT EXISTS images (
-                       uuid text,
-                       extension text,
-                       content text,
-                       ordinal int, 
-                       timestamp text,
-                       draft int
-                     )`);
-	this._close();
-    }
-
 
     async create (desc) {
 	this._connect();
@@ -319,7 +288,7 @@ class Images {
 	    limit = 10;
 	}
 	this._connect();
-	let results = await this._run(`SELECT * FROM images WHERE draft = 0 ORDER BY ordinal LIMIT ? OFFSET ?`, [limit, offset]);
+	let results = await this._run(`SELECT * FROM images WHERE draft = 0 ORDER BY datetime(timestamp) desc LIMIT ? OFFSET ?`, [limit, offset]);
 	results = results.map(r => this._process_row(r));
 	this._close();
 	return results;
@@ -333,7 +302,7 @@ class Images {
 	    limit = 10;
 	}
 	this._connect();
-	let results = await this._run(`SELECT * FROM images WHERE uuid IN (SELECT uuid FROM tags WHERE tag = ?) AND draft = 0 ORDER BY ordinal LIMIT ? OFFSET ?`, [tag, limit, offset]);
+	let results = await this._run(`SELECT * FROM images WHERE uuid IN (SELECT uuid FROM tags WHERE tag = ?) AND draft = 0 ORDER BY datetime(timestamp) desc LIMIT ? OFFSET ?`, [tag, limit, offset]);
 	results = results.map(r => this._process_row(r));
 	this._close();
 	return results;
@@ -351,17 +320,6 @@ class Images {
 	results = results.map(r => this._process_row(r));
 	this._close();
 	return results;
-    }
-    
-    async read_recent (limit) {
-	if (limit === 'undefined') {
-	    limit = 10;
-	}
-	this._connect();
-	let results = await this._run(`SELECT * FROM images where draft = 0 ORDER BY datetime(timestamp) desc LIMIT ?`, [limit]);
-	results = results.map(r => this._process_row(r));
-	this._close();
-        return results;
     }
 
     async read (uuid) {

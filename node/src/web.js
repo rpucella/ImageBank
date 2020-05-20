@@ -16,12 +16,7 @@ busboy.extend(app, {
 });
 
 app.get('/', (req, res) => {
-    res.redirect('/recent');
-});
-
-app.get('/recent', async (req, res) => {
-    const results = await imagebank.recent(_FOLDER);
-    res.send(nunjucks.render('recent.jinja2', {images: results}));
+    res.redirect('/page/1');
 });
 
 app.get('/draft/', async (req, res) => {
