@@ -129,7 +129,7 @@ async function publish_image (folder, uuid) {
     if (!img) {
 	throw `Can't find UUID ${uuid}`;
     }
-    img.date_published = dal.toISO(new Date())
+    img.date_published = new Date()
     img.draft = false;
     await new dal.Images(folder).update(img);
 }
