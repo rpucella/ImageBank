@@ -5,6 +5,7 @@ const path = require('path');
 const busboy = require('express-busboy');
 
 let _FOLDER = null;
+let _EXPECTED_VERSION = 2;
 
 const app = express();
 const port = 8501
@@ -14,6 +15,21 @@ busboy.extend(app, {
     upload: true,
     path: '/tmp/imagebank-upload'
 });
+
+async function run (folder) {
+    _FOLDER = folder;
+    if (!_FOLDER.startsWith('/')) {
+	_FOLDER = path.join(process.cwd(), _FOLDER);
+    }
+    const version = await imagebank.version(_FOLDER);
+    if (version !== _EXPECTED_VERSION) {
+	console.log(`Wrong DB version - expected ${_EXPECTED_VERSION} but found ${version}`);
+	console.log('Aborting');
+    } else {
+	console.log(`Folder: ${_FOLDER}`);
+	app.listen(port, () => console.log(`Listening at http://localhost:${port}`));
+    }
+}
 
 app.get('/', (req, res) => {
     res.redirect('/page/1');
@@ -157,12 +173,9 @@ app.get('/kill', (req, res) => {
 
 app.use('/static', express.static(path.join(__dirname, 'static')));
 
+
 if (process.argv.length > 2) {
-    _FOLDER = process.argv[2];
-    if (!_FOLDER.startsWith('/')) {
-	_FOLDER = path.join(process.cwd(), _FOLDER);
-    }
-    app.listen(port, () => console.log(`Folder: ${_FOLDER}\nListening at http://localhost:${port}`));
+    run(process.argv[2]);
 }
 else {
     console.log('USAGE: imagebank <folder>');

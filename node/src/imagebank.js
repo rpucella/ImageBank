@@ -21,6 +21,11 @@ function group_tags_by_uuid (rows) {
     return result;
 }
 
+async function version (folder) {
+    const v = await new dal.Version(folder).read();
+    return v.version;
+}
+    
 async function drafts (folder, p) { 
     const offset = (p - 1) * 10
     const results = await new dal.Images(folder).read_all_drafts(offset, 10)
@@ -165,6 +170,7 @@ async function add_image (folder, file, filename) {
 }
     
 module.exports = {
+    version: version,
     drafts: drafts,
     drafts_new: drafts_new,
     page: page,
