@@ -25,7 +25,9 @@
         </div>
       </div>
       <div class="dates">
-      <p>Created: {{ img['timestamp'] }}</p>
+      <p>Created: {{ img['date_created'] }}</p>
+      <p>Updated: {{ img['date_updated'] }}</p>
+      {% if img['date_published'] %} <p>Published: {{ img['date_published'] }}</p>{% endif %}
       </div>
     </div>
   </div>

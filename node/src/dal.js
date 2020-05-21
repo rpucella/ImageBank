@@ -207,21 +207,17 @@ class Images {
     async create (desc) {
 	this._connect();
 	const timestamp = toISO(new Date());
-	let ordinal = 1;
-	let rows = await this._run(`SELECT max(ordinal) as ord FROM images`);
-	if (rows.length > 0) {
-            ordinal = rows[0].ord + 1
-	}
 	rows = await this._run(`SELECT * FROM images WHERE uuid = ? LIMIT 1`, [desc.uuid])
 	if (rows.length > 0) {
 	    throw `UUID ${desc.uuid} already exists`;
 	}
-	await this._run(`INSERT INTO images VALUES (?, ?, ?, ?, ?, ?)`, [
+	await this._run(`INSERT INTO images VALUES (?, ?, ?, ?, ?, ?, ?)`, [
 	    desc.uuid,
 	    desc.extension,
 	    desc.content.join('\n\n'),
-	    ordinal,
 	    timestamp,
+	    timestamp,
+	    null,
 	    desc.draft ? 1 : 0
 	]);
 	this._close();
@@ -229,16 +225,18 @@ class Images {
 
     async update (desc) {
 	this._connect();
+	const timestamp = toISO(new Date());
 	let rows = await this._run(`SELECT * FROM images WHERE uuid = ? LIMIT 1`, [desc.uuid]);
 	if (rows.length > 0) {
 	    await this._run(`DELETE FROM images WHERE uuid = ?`, [desc.uuid]);
 	}
-	await this._run(`INSERT INTO images VALUES (?, ?, ?, ?, ?, ?)`, [
+	await this._run(`INSERT INTO images VALUES (?, ?, ?, ?, ?, ?, ?)`, [
 	    desc.uuid,
 	    desc.extension,
 	    desc.content.join('\n\n'),
-	    desc.ordinal,
-	    toISO(desc.timestamp),
+	    toISO(desc.date_created),
+	    timestamp,
+	    desc.date_published && desc.draft == 0 ? toISO(desc.date_published) : null,
 	    desc.draft ? 1 : 0
 	]);
 	this._close();
@@ -254,8 +252,9 @@ class Images {
 	return { uuid: r.uuid,
                  extension: r.extension,
                  content: r.content.split('\n\n'),
-                 ordinal: r.ordinal,
-                 timestamp: new Date(r.timestamp),
+                 date_created: new Date(r.date_created),
+                 date_updated: new Date(r.date_updated),
+                 date_published: r.date_published ? new Date(r.date_published) : null,
                  draft: r.draft ? true : false }
     }
 
@@ -288,7 +287,7 @@ class Images {
 	    limit = 10;
 	}
 	this._connect();
-	let results = await this._run(`SELECT * FROM images WHERE draft = 0 ORDER BY datetime(timestamp) desc LIMIT ? OFFSET ?`, [limit, offset]);
+	let results = await this._run(`SELECT * FROM images WHERE draft = 0 ORDER BY datetime(date_published) desc LIMIT ? OFFSET ?`, [limit, offset]);
 	results = results.map(r => this._process_row(r));
 	this._close();
 	return results;
@@ -302,7 +301,7 @@ class Images {
 	    limit = 10;
 	}
 	this._connect();
-	let results = await this._run(`SELECT * FROM images WHERE uuid IN (SELECT uuid FROM tags WHERE tag = ?) AND draft = 0 ORDER BY datetime(timestamp) desc LIMIT ? OFFSET ?`, [tag, limit, offset]);
+	let results = await this._run(`SELECT * FROM images WHERE uuid IN (SELECT uuid FROM tags WHERE tag = ?) AND draft = 0 ORDER BY datetime(date_published) desc LIMIT ? OFFSET ?`, [tag, limit, offset]);
 	results = results.map(r => this._process_row(r));
 	this._close();
 	return results;
@@ -316,7 +315,7 @@ class Images {
 	    limit = 10;
 	}
 	this._connect();
-	let results = await this._run(`SELECT * FROM images WHERE draft = 1 ORDER BY datetime(timestamp) desc LIMIT ? OFFSET ?`, [limit, offset]);
+	let results = await this._run(`SELECT * FROM images WHERE draft = 1 ORDER BY datetime(date_updated) desc LIMIT ? OFFSET ?`, [limit, offset]);
 	results = results.map(r => this._process_row(r));
 	this._close();
 	return results;
@@ -324,11 +323,10 @@ class Images {
 
     async read (uuid) {
 	this._connect();
-	const results = await this._run(`SELECT * FROM images WHERE uuid = ? ORDER BY datetime(timestamp) desc`, [uuid]);
+	const results = await this._run(`SELECT * FROM images WHERE uuid = ?` , [uuid]);
         if (results.length > 0) {
 	    if (results.length > 1) {
-		console.log(`Warning: too many rows ${results.length} for UUID ${uuid}`);
-		console.log(`         returning most recent only`);
+		throw `Too many rows ${results.length} for UUID ${uuid}`;
 	    }
             return this._process_row(results[0]);
 	}
@@ -338,5 +336,6 @@ class Images {
 module.exports = {
     Version: Version,
     Tags: Tags,
-    Images: Images
+    Images: Images,
+    toISO: toISO
 }

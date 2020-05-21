@@ -112,6 +112,7 @@ async function publish_image (folder, uuid) {
     if (!img) {
 	throw `Can't find UUID ${uuid}`;
     }
+    img.date_published = dal.toISO(new Date())
     img.draft = false;
     await new dal.Images(folder).update(img);
 }
@@ -139,10 +140,9 @@ async function add_image (folder, file, filename) {
 	throw `Cannot figure out extension of ${f}`;
     }
     await new dal.Images(folder).create({'uuid': uuid,
-				     'extension': extension,
-				     'content': [],
-				     'ordinal': 0,
-				     'draft': true});
+					 'extension': extension,
+					 'content': [],
+					 'draft': true});
     move(file, path.join(folder, `${uuid}.${extension}`));
     return uuid;
 }
