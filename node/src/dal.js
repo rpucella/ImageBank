@@ -267,7 +267,14 @@ class Images {
 
     async count_all_drafts () {
 	this._connect();
-	const rows = await this._run(`SELECT count(*) as ct FROM images WHERE draft = 1`);
+	const rows = await this._run(`SELECT count(*) as ct FROM images WHERE draft = 1 AND content IS NOT NULL AND content <> ''`);
+	this._close();
+	return rows[0];
+    }
+
+    async count_all_new () {
+	this._connect();
+	const rows = await this._run(`SELECT count(*) as ct FROM images WHERE draft = 1 AND (content IS NULL OR content = '')`);
 	this._close();
 	return rows[0];
     }
@@ -315,7 +322,21 @@ class Images {
 	    limit = 10;
 	}
 	this._connect();
-	let results = await this._run(`SELECT * FROM images WHERE draft = 1 ORDER BY datetime(date_updated) desc LIMIT ? OFFSET ?`, [limit, offset]);
+	let results = await this._run(`SELECT * FROM images WHERE draft = 1 AND content IS NOT NULL AND content <> '' ORDER BY datetime(date_updated) desc LIMIT ? OFFSET ?`, [limit, offset]);
+	results = results.map(r => this._process_row(r));
+	this._close();
+	return results;
+    }
+
+    async read_all_new (offset, limit) {
+	if (offset === 'undefined') {
+	    offset = 0;
+	}
+	if (limit === 'undefined') {
+	    limit = 10;
+	}
+	this._connect();
+	let results = await this._run(`SELECT * FROM images WHERE draft = 1 AND (content IS NULL OR content = '') ORDER BY datetime(date_updated) desc LIMIT ? OFFSET ?`, [limit, offset]);
 	results = results.map(r => this._process_row(r));
 	this._close();
 	return results;

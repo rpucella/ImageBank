@@ -26,13 +26,30 @@ app.get('/draft/', async (req, res) => {
 app.get('/draft/:p', async (req, res) => {
     const p = parseInt(req.params.p) || 0;
     if (p < 1) {
-	res.redirect('/page');
+	res.redirect('/draft');
     }
     else {
 	const count = await imagebank.count_drafts(_FOLDER);
 	const results = await imagebank.drafts(_FOLDER, p);
 	const total_pages = Math.trunc((count - 1) / 10) + 1;
 	res.send(nunjucks.render('page.jinja2', { pagetitle: `Drafts`, images: results, page: p, total: total_pages, base: 'draft'}));
+    }
+});
+
+app.get('/new/', async (req, res) => {
+    res.redirect('/new/1');
+});
+
+app.get('/new/:p', async (req, res) => {
+    const p = parseInt(req.params.p) || 0;
+    if (p < 1) {
+	res.redirect('/new');
+    }
+    else {
+	const count = await imagebank.count_new(_FOLDER);
+	const results = await imagebank.drafts_new(_FOLDER, p);
+	const total_pages = Math.trunc((count - 1) / 10) + 1;
+	res.send(nunjucks.render('page.jinja2', { pagetitle: `New`, images: results, page: p, total: total_pages, base: 'new'}));
     }
 });
 
