@@ -24,6 +24,11 @@
           </div>
         </div>
       </div>
+      <div class="dates">
+      <p>Created: {{ img['date_created'] }}</p>
+      <p>Updated: {{ img['date_updated'] }}</p>
+      {% if img['date_published'] %} <p>Published: {{ img['date_published'] }}</p>{% endif %}
+      </div>
     </div>
   </div>
   </div>
@@ -72,6 +77,11 @@
       }
       .entry > img {
         width: 100%;
+      }
+
+      .dates {
+        margin-top: 32px;
+	font-size: 75%;
       }
 
     </style>
@@ -130,7 +140,6 @@ function post (endpoint, d, thenLoad) {
       
       <div id="navbarBasicExample" class="navbar-menu">
 	<div class="navbar-start">
-	  <a href="/recent" class="navbar-item"> Recent </a>
 	  <a href="/page" class="navbar-item"> Published </a>
 	  <a href="/draft" class="navbar-item"> Drafts </a>
 	  <a href="/tag" class="navbar-item"> Tags </a>

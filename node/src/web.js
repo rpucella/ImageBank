@@ -16,12 +16,7 @@ busboy.extend(app, {
 });
 
 app.get('/', (req, res) => {
-    res.redirect('/recent');
-});
-
-app.get('/recent', async (req, res) => {
-    const results = await imagebank.recent(_FOLDER);
-    res.send(nunjucks.render('recent.jinja2', {images: results}));
+    res.redirect('/page/1');
 });
 
 app.get('/draft/', async (req, res) => {
@@ -77,7 +72,7 @@ app.get('/tag/:tag/:p', async (req, res) => {
 	const count = await imagebank.count_tag(_FOLDER, tag);
 	const results = await imagebank.tag(_FOLDER, tag, p);
 	const total_pages = Math.trunc((count - 1) / 10) + 1;
-	res.send(nunjucks.render('page.jinja2', { pagetitle: `Tag — ${tag}`, images: results, page: p, total: total_pages, base: `tag/${tag}`}));
+	res.send(nunjucks.render('page.jinja2', { pagetitle: `Tag: ${tag}`, images: results, page: p, total: total_pages, base: `tag/${tag}`}));
     }
 });
 
@@ -147,6 +142,9 @@ app.use('/static', express.static(path.join(__dirname, 'static')));
 
 if (process.argv.length > 2) {
     _FOLDER = process.argv[2];
+    if (!_FOLDER.startsWith('/')) {
+	_FOLDER = path.join(process.cwd(), _FOLDER);
+    }
     app.listen(port, () => console.log(`Folder: ${_FOLDER}\nListening at http://localhost:${port}`));
 }
 else {

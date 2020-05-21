@@ -21,17 +21,6 @@ function group_tags_by_uuid (rows) {
     return result;
 }
 
-async function recent (folder) {
-    const results = await new dal.Images(folder).read_recent(limit=10);
-    const tags = await new dal.Tags(folder).read_by_uuids(results.map(r => r.uuid));
-    const dtags = group_tags_by_uuid(tags);
-    for (let r of results) {
-        inject_link(r);
-	inject_tags(r, dtags);
-    }
-    return results;
-}
-
 async function drafts (folder, p) { 
     const offset = (p - 1) * 10
     const results = await new dal.Images(folder).read_all_drafts(offset, 10)
@@ -123,6 +112,7 @@ async function publish_image (folder, uuid) {
     if (!img) {
 	throw `Can't find UUID ${uuid}`;
     }
+    img.date_published = dal.toISO(new Date())
     img.draft = false;
     await new dal.Images(folder).update(img);
 }
@@ -150,16 +140,14 @@ async function add_image (folder, file, filename) {
 	throw `Cannot figure out extension of ${f}`;
     }
     await new dal.Images(folder).create({'uuid': uuid,
-				     'extension': extension,
-				     'content': [],
-				     'ordinal': 0,
-				     'draft': true});
+					 'extension': extension,
+					 'content': [],
+					 'draft': true});
     move(file, path.join(folder, `${uuid}.${extension}`));
     return uuid;
 }
     
 module.exports = {
-    recent: recent,
     drafts: drafts,
     page: page,
     tags_all: tags_all,
