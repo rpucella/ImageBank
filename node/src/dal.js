@@ -207,7 +207,7 @@ class Images {
     async create (desc) {
 	this._connect();
 	const timestamp = toISO(new Date());
-	rows = await this._run(`SELECT * FROM images WHERE uuid = ? LIMIT 1`, [desc.uuid])
+	let rows = await this._run(`SELECT * FROM images WHERE uuid = ? LIMIT 1`, [desc.uuid])
 	if (rows.length > 0) {
 	    throw `UUID ${desc.uuid} already exists`;
 	}
