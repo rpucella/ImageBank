@@ -52,6 +52,29 @@ app.get('/draft/:p', async (req, res) => {
     }
 });
 
+app.get('/note/', async (req, res) => {
+    res.redirect('/note/1');
+});
+
+app.get('/note/:p', async (req, res) => {
+    const p = parseInt(req.params.p) || 0;
+    if (p < 1) {
+	res.redirect('/note');
+    }
+    else {
+	const count = await imagebank.count_notes(_FOLDER);
+	const results = await imagebank.notes(_FOLDER, p);
+	const total_pages = Math.trunc((count - 1) / 10) + 1;
+	res.send(nunjucks.render('notes.jinja2', { notes: results, page: p, total: total_pages, base: 'note'}));
+    }
+});
+
+app.post('/post/new-note', async (req, res) => {
+    const uuid = await imagebank.new_note(_FOLDER);
+    res.send(JSON.stringify({ uid: uuid }));
+});
+
+
 app.get('/new/', async (req, res) => {
     res.redirect('/new/1');
 });

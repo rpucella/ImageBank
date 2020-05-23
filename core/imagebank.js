@@ -70,6 +70,17 @@ async function count_tag (folder, tag) {
     return count.ct;
 }
 
+async function count_notes (folder) {
+    const count = await new dal.Notes(folder).count_all();
+    return count.ct;
+}
+
+async function notes (folder, p) {
+    const offset = (p - 1) * 10
+    const results = await new dal.Notes(folder).read_all(offset, 10);
+    return results;
+}    
+
 async function page (folder, p) {
     const offset = (p - 1) * 10
     const results = await new dal.Images(folder).read_all(offset, 10);
@@ -168,6 +179,13 @@ async function add_image (folder, file, filename) {
     move(file, path.join(folder, `${uuid}.${extension}`));
     return uuid;
 }
+
+async function new_note (folder) {
+    const uuid = uuidlib.v4();
+    await new dal.Notes(folder).create({'uuid': uuid,
+					'content': []});
+    return uuid;
+}
     
 module.exports = {
     version: version,
@@ -185,5 +203,8 @@ module.exports = {
     edit_image: edit_image,
     add_image: add_image,
     draft_image: draft_image,
-    publish_image: publish_image
+    publish_image: publish_image,
+    count_notes: count_notes,
+    notes: notes,
+    new_note: new_note
 }

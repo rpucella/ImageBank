@@ -1,0 +1,64 @@
+{% extends "layout.jinja2" %}
+
+
+{% block container %}
+
+  <h1>Notes</h1>
+
+  {% if total > 1 %}
+  {% if total > 10 %}
+  <p>WRITE ME!</p>
+  {% else %}
+  <nav class="pagination is-centered" role="navigation" aria-label="pagination">
+    <a class="pagination-previous" href="/{{base}}/{{page - 1}}" {% if page == 1 %}disabled {% endif %}>Previous</a>
+        <a class="pagination-next" href="/{{base}}/{{page + 1}}"  {% if page == total %}disabled{% endif %}>Next</a>
+    <ul class="pagination-list">
+      {% for p in range(1, total + 1) %}
+      <li>   
+	<a class="pagination-link {% if p == page %}is-current{% endif %}" href="/{{base}}/{{p}}">{{p}}</a>
+      </li>
+      {% endfor %}
+    </ul>
+  </nav>
+  {% endif %}
+  {% endif %}
+  
+
+  <div class="field is-grouped is-grouped-right">
+    <p class="control">
+      <a class="button is-link" id="button-new-note">
+        New Note
+      </a>
+    </p>
+  </div>
+  
+  {% for note in notes %}
+  <p>{{ note }}</p>
+  {% endfor %}
+
+  {% if total > 1 %}
+  {% if total > 10 %}
+  <p>WRITE ME!</p>
+  {% else %}
+  <nav class="pagination is-centered" role="navigation" aria-label="pagination">
+    <a class="pagination-previous" href="/{{base}}/{{page - 1}}" {% if page == 1 %}disabled {% endif %}>Previous</a>
+    <a class="pagination-next" href="/{{base}}/{{page + 1}}"  {% if page == total %}disabled{% endif %}>Next</a>
+    <ul class="pagination-list">
+      {% for p in range(1, total + 1) %}
+      <li>   
+	<a class="pagination-link {% if p == page %}is-current{% endif %}" href="/{{base}}/{{p}}">{{p}}</a>
+      </li>
+      {% endfor %}
+    </ul>
+  </nav>
+  {% endif %}
+  {% endif %}
+
+  <script>
+document.querySelector('#button-new-note').addEventListener('click', function() {
+  post('/post/new-note', '/note/');
+});
+  </script>
+  
+{% endblock %}
+    
