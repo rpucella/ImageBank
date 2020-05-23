@@ -1,6 +1,6 @@
 const express = require('express');
 const nunjucks = require('nunjucks');
-const imagebank = require('./imagebank');
+const imagebank = require('../core/imagebank');
 const path = require('path');
 const busboy = require('express-busboy');
 
@@ -10,7 +10,7 @@ let _EXPECTED_VERSION = 2;
 const app = express();
 const port = 8501
 
-nunjucks.configure('src/templates');
+nunjucks.configure('./web/templates');
 busboy.extend(app, {
     upload: true,
     path: '/tmp/imagebank-upload'
