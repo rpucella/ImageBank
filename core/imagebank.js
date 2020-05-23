@@ -39,8 +39,8 @@ async function drafts (folder, p) {
 }
 
 async function drafts_new (folder, p) { 
-    const offset = (p - 1) * 10
-    const results = await new dal.Images(folder).read_all_new(offset, 10)
+    const offset = (p - 1) * 16
+    const results = await new dal.Images(folder).read_all_new(offset, 16)
     const tags = await new dal.Tags(folder).read_by_uuids(results.map(r => r.uuid));
     const dtags = group_tags_by_uuid(tags);
     for (let r of results) {

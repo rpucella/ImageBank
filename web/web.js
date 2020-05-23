@@ -64,8 +64,8 @@ app.get('/new/:p', async (req, res) => {
     else {
 	const count = await imagebank.count_new(_FOLDER);
 	const results = await imagebank.drafts_new(_FOLDER, p);
-	const total_pages = Math.trunc((count - 1) / 10) + 1;
-	res.send(nunjucks.render('page.jinja2', { pagetitle: `New`, images: results, page: p, total: total_pages, base: 'new'}));
+	const total_pages = Math.trunc((count - 1) / 16) + 1;
+	res.send(nunjucks.render('board.jinja2', { pagetitle: `New`, images: results, page: p, total: total_pages, base: 'new'}));
     }
 });
 
