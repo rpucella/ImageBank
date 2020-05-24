@@ -17,6 +17,12 @@ CREATE TABLE IF NOT EXISTS images (
   draft int
 );
 
+CREATE TABLE IF NOT EXISTS notes (
+  uuid text,
+  content text,
+  date_updated text
+);
+
 
 -- v1
 -- 
