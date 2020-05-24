@@ -24,7 +24,7 @@
   {% endif %}
   
 
-  <div class="field is-grouped is-grouped-right">
+  <div class="field is-grouped">
     <p class="control">
       <a class="button is-link" id="button-new-note">
         New Note
@@ -33,7 +33,31 @@
   </div>
   
   {% for note in notes %}
-  <p>{{ note }}</p>
+<div class="columns">
+  
+  <div class="column">
+  
+    <div class="field">
+      <div class="control">
+        <textarea class="textarea ib-input" data-uuid={{note['uuid']}} rows="12">{{note['content']}}</textarea>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="column is-narrow">
+  
+    <div class="field">
+      <div class="control">
+      <div class="buttons">
+        <button class="button is-link ib-save" data-uuid={{note['uuid']}} disabled>Save</button>
+<!--	<button class="button is-link" id="button-delete">Delete</button> -->
+      </div>
+      </div>
+    </div>
+    
+  </div>
+</div>
   {% endfor %}
 
   {% if total > 1 %}
@@ -57,6 +81,27 @@
   <script>
 document.querySelector('#button-new-note').addEventListener('click', function() {
   post('/post/new-note', '/note/');
+});
+
+document.querySelectorAll('.ib-input').forEach(function(item) {
+  var uuid = item.dataset.uuid;
+  item.addEventListener('input', function() {
+    if (!item.enabled) {
+      item.enabled = true;
+      document.querySelector(`.ib-save[data-uuid="${uuid}"]`).removeAttribute('disabled');
+    }
+  });
+});
+
+document.querySelectorAll('.ib-save').forEach(function(item) {
+  var uuid = item.dataset.uuid;
+  item.addEventListener('click', function() {
+    var input = document.querySelector(`.ib-input[data-uuid="${uuid}"]`);
+    // post('/post/edit', {uid: uid, text: text, tags: tags.join(' ;; ')}, '/image/' + uid);
+    console.log('text =', input.value);
+    input.enabled = false;
+    item.setAttribute('disabled', 'disabled');
+  });
 });
   </script>
   
