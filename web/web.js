@@ -48,7 +48,7 @@ app.get('/draft/:p', async (req, res) => {
 	const count = await imagebank.count_drafts(_FOLDER);
 	const results = await imagebank.drafts(_FOLDER, p);
 	const total_pages = Math.trunc((count - 1) / 10) + 1;
-	res.send(nunjucks.render('page.jinja2', { pagetitle: `Drafts`, images: results, page: p, total: total_pages, base: 'draft'}));
+	res.send(nunjucks.render('page.nj', { pagetitle: `Drafts`, images: results, page: p, total: total_pages, base: 'draft'}));
     }
 });
 
@@ -65,7 +65,7 @@ app.get('/note/:p', async (req, res) => {
 	const count = await imagebank.count_notes(_FOLDER);
 	const results = await imagebank.notes(_FOLDER, p);
 	const total_pages = Math.trunc((count - 1) / 10) + 1;
-	res.send(nunjucks.render('notes.jinja2', { notes: results, page: p, total: total_pages, base: 'note'}));
+	res.send(nunjucks.render('notes.nj', { notes: results, page: p, total: total_pages, base: 'note'}));
     }
 });
 
@@ -96,7 +96,7 @@ app.get('/new/:p', async (req, res) => {
 	const count = await imagebank.count_new(_FOLDER);
 	const results = await imagebank.drafts_new(_FOLDER, p);
 	const total_pages = Math.trunc((count - 1) / 16) + 1;
-	res.send(nunjucks.render('board.jinja2', { pagetitle: `New`, images: results, page: p, total: total_pages, base: 'new'}));
+	res.send(nunjucks.render('board.nj', { pagetitle: `New`, images: results, page: p, total: total_pages, base: 'new'}));
     }
 });
 
@@ -113,13 +113,13 @@ app.get('/page/:p', async (req, res) => {
 	const count = await imagebank.count(_FOLDER);
 	const results = await imagebank.page(_FOLDER, p);
 	const total_pages = Math.trunc((count - 1) / 10) + 1;
-	res.send(nunjucks.render('page.jinja2', { pagetitle: `Published`, images: results, page: p, total: total_pages, base: 'page'}));
+	res.send(nunjucks.render('page.nj', { pagetitle: `Published`, images: results, page: p, total: total_pages, base: 'page'}));
     }
 });
 
 app.get('/tag', async (req, res) => {
     const results = await imagebank.tags_all(_FOLDER);
-    res.send(nunjucks.render('tags.jinja2', { tags: results }));
+    res.send(nunjucks.render('tags.nj', { tags: results }));
 });
 
 app.get('/tag/:tag', (req, res) => {
@@ -136,13 +136,13 @@ app.get('/tag/:tag/:p', async (req, res) => {
 	const count = await imagebank.count_tag(_FOLDER, tag);
 	const results = await imagebank.tag(_FOLDER, tag, p);
 	const total_pages = Math.trunc((count - 1) / 10) + 1;
-	res.send(nunjucks.render('page.jinja2', { pagetitle: `Tag: ${tag}`, images: results, page: p, total: total_pages, base: `tag/${tag}`}));
+	res.send(nunjucks.render('page.nj', { pagetitle: `Tag: ${tag}`, images: results, page: p, total: total_pages, base: `tag/${tag}`}));
     }
 });
 
 app.get('/image/:uuid', async (req, res) => {
     const result = await imagebank.image(_FOLDER, req.params.uuid);
-    res.send(nunjucks.render('image.jinja2', { image: result }));
+    res.send(nunjucks.render('image.nj', { image: result }));
 });
 
 app.get('/raw/:path', (req, res) => {
@@ -150,13 +150,13 @@ app.get('/raw/:path', (req, res) => {
 });
 
 app.get('/add', (req, res) => {
-    res.send(nunjucks.render('add.jinja2'));
+    res.send(nunjucks.render('add.nj'));
 });
 
 app.get('/edit/:uuid', async (req, res) => {
     const result = await imagebank.edit(_FOLDER, req.params.uuid);
     if (result) {
-	res.send(nunjucks.render('edit.jinja2', { image: result }));
+	res.send(nunjucks.render('edit.nj', { image: result }));
     }
     else {
 	res.status(404).send(`No such UUID to edit: ${req.params.uuid}`);

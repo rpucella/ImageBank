@@ -1,4 +1,4 @@
-{% extends "layout.jinja2" %}
+{% extends "layout.nj" %}
 
 
 {% block container %}
@@ -21,13 +21,9 @@
   </nav>
   {% endif %}
   
-  <div class="board-grid">
   {% for img in images %}
-  <a class="board-cell" href="/image/{{img['uuid']}}">
-    <img src="{{img['link']}}" width="100%">
-  </a>
+  {{ imagerow(img) }}  
   {% endfor %}
-  </div>
 
   {% if total > 10 %}
   <p>WRITE ME!</p>
