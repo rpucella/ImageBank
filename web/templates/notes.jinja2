@@ -39,7 +39,7 @@
   
     <div class="field">
       <div class="control">
-        <textarea class="textarea ib-input" data-uuid={{note['uuid']}} rows="12">{{note['content']}}</textarea>
+        <textarea class="textarea ib-input" data-uuid={{note['uuid']}} rows="5">{{note['content']}}</textarea>
       </div>
     </div>
 
@@ -97,8 +97,8 @@ document.querySelectorAll('.ib-save').forEach(function(item) {
   var uuid = item.dataset.uuid;
   item.addEventListener('click', function() {
     var input = document.querySelector(`.ib-input[data-uuid="${uuid}"]`);
-    // post('/post/edit', {uid: uid, text: text, tags: tags.join(' ;; ')}, '/image/' + uid);
-    console.log('text =', input.value);
+    var text = input.value;
+    post('/post/save-note', {uuid: uuid, text: text}, '/note/');
     input.enabled = false;
     item.setAttribute('disabled', 'disabled');
   });

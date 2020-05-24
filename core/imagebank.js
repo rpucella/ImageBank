@@ -187,6 +187,15 @@ async function new_note (folder) {
     return uuid;
 }
     
+async function save_note (folder, uuid, text) {
+    const note = await new dal.Notes(folder).read(uuid)
+    if (!note) {
+	throw `Can't find UUID ${uuid}`;
+    }
+    note.content = text
+    await new dal.Notes(folder).update(note)
+}
+    
 module.exports = {
     version: version,
     drafts: drafts,
@@ -206,5 +215,6 @@ module.exports = {
     publish_image: publish_image,
     count_notes: count_notes,
     notes: notes,
-    new_note: new_note
+    new_note: new_note,
+    save_note: save_note
 }

@@ -71,7 +71,15 @@ app.get('/note/:p', async (req, res) => {
 
 app.post('/post/new-note', async (req, res) => {
     const uuid = await imagebank.new_note(_FOLDER);
-    res.send(JSON.stringify({ uid: uuid }));
+    res.send(JSON.stringify({ uuid: uuid }));
+});
+
+app.post('/post/save-note', async (req, res) => {
+    const uuid = req.body.uuid;
+    let text = req.body.text;
+    text = text.replace(/\r/g, '').split('\n\n').map(t => t.trim());
+    await imagebank.save_note(_FOLDER, uuid, text);
+    res.send(JSON.stringify({ uuid: uuid }));
 });
 
 
