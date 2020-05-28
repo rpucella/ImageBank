@@ -1,58 +1,5 @@
 {% extends "layout.nj" %}
 
-{% macro pager (page, total, base) -%}
-
-  {% if total > 10 %}
-  {% set start = (page - 3) if (page - 3) > 1 else 1 %}
-  {% set end = (page + 3) if (page + 3) < total else total %}
-  <nav class="pagination" role="navigation" aria-label="pagination">
-    <a class="pagination-previous" href="/{{base}}/{{page - 1}}" {% if page == 1 %}disabled {% endif %}>Previous</a>
-        <a class="pagination-next" href="/{{base}}/{{page + 1}}"  {% if page == total %}disabled{% endif %}>Next</a>
-    <ul class="pagination-list">
-      {% if page > 4 %}
-      <li>   
-	<a class="pagination-link" href="/{{base}}/1">1</a>
-      </li>
-      {% endif %}
-      {% if page > 5 %}
-      <li>
-        <span class="pagination-ellipsis">&hellip;</span>      
-      </li>
-      {% endif %}
-      {% for p in range(start, end + 1) %}
-      <li>   
-	<a class="pagination-link {% if p == page %}is-current{% endif %}" href="/{{base}}/{{p}}">{{p}}</a>
-      </li>
-      {% endfor %}
-      {% if page < total - 4 %}
-      <li>
-        <span class="pagination-ellipsis">&hellip;</span>      
-      </li>
-      {% endif %}
-      {% if page < total -3 %}
-      <li>   
-	<a class="pagination-link" href="/{{base}}/{{total}}">{{total}}</a>
-      </li>
-      {% endif %}
-    </ul>
-    </ul>
-  </nav>
-  {% else %}
-  <nav class="pagination" role="navigation" aria-label="pagination">
-    <a class="pagination-previous" href="/{{base}}/{{page - 1}}" {% if page == 1 %}disabled {% endif %}>Previous</a>
-    <a class="pagination-next" href="/{{base}}/{{page + 1}}"  {% if page == total %}disabled{% endif %}>Next</a>
-    <ul class="pagination-list">
-      {% for p in range(1, total + 1) %}
-      <li>   
-	<a class="pagination-link {% if p == page %}is-current{% endif %}" href="/{{base}}/{{p}}">{{p}}</a>
-      </li>
-      {% endfor %}
-    </ul>
-  </nav>
-  {% endif %}
-  
-{%- endmacro %}
-
 
 {% block container %}
 
