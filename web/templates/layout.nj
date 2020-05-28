@@ -47,6 +47,11 @@
     <link rel="stylesheet" href="/static/bulma.min.css">
     
     <style>
+
+      nav.pagination {
+        margin-top: 16px;
+	margin-bottom: 16px;
+      }
       
       h1 { font-size: 225%; margin-bottom: 16px;}
       h2 { font-size: 170%; }
