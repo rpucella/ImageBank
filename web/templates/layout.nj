@@ -194,6 +194,41 @@ function post (endpoint, d, thenLoad) {
   });
 }
 
+
+function postMany (endpoint, ds, thenLoad) {
+
+  let jarOfPromises = [];
+  for (const d of ds) { 
+    // Create a formdata object and add the inputs
+    let data = new FormData();
+    Object.entries(d).forEach(function(e) {
+      data.append(e[0], e[1]);
+    });
+
+    jarOfPromises.push(new Promise((resolve, reject) => {
+      fetch(endpoint, {
+        method: 'POST',
+        body: data
+      }).then(function(response) {
+        if (response.status !== 200) { 
+          console.log('ERROR:', response.statusText);
+          console.log(response);
+	  reject();
+        }
+        return response.json();
+      }).then(function(json) {
+        resolve();
+      }).catch(function(error) {
+        console.log('ERROR:', error);
+	reject();
+      });
+    }));
+  }
+  Promise.all(jarOfPromises)
+    .then(result => window.location.assign(thenLoad))
+}
+
+
   </script>
 
     <nav class="navbar is-tablet" role="navigation" aria-label="main navigation">

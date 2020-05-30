@@ -6,7 +6,7 @@
 <div class="field">
   <label class="label">File</label>
   <div class="control">
-    <input class="input" type="file" placeholder="File" id="input-file">
+    <input class="input" type="file" placeholder="File" id="input-file" multiple>
   </div>
 </div>
 
@@ -18,11 +18,21 @@
 
 <script>
 document.getElementById('button-save').addEventListener('click', function() {
-  var files = document.getElementById('input-file').files;
+  let files = document.getElementById('input-file').files;
   if (files.length === 0) {
     return;
   }
-  post('/post/add', {file: files[0]}, function(json) { return '/edit/' + json.uid; });
+  if (files.length === 1) { 
+    post('/post/add', {file: files[0]}, function(json) { return '/edit/' + json.uid; });
+    return;
+  }
+  // more than one file - send them all and don't forward to edit
+  // not sure files supports iteration
+  let ds = [];
+  for (let i = 0; i < files.length; i++) {
+    ds.push({ file : files[i] });
+  }
+  postMany('/post/add', ds, '/new');
 });
 </script>
 
