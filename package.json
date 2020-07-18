@@ -1,9 +1,9 @@
 {
   "name": "imagebank",
   "version": "1.0.0",
-  "main": "web/web.js",
+  "main": "server/web.js",
   "scripts": {
-    "start": "node web/web.js"
+    "start": "node server/web.js"
   },
   "license": "CC0-1.0",
   "dependencies": {
