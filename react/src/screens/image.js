@@ -16,7 +16,7 @@ const ScreenImage = ({uuid}) => {
   return (
   <Screen title={'Image ' + uuid}>
     <IfFulfilled state={state}>
-      { ({image}) => <Image key={image.uuid} img={image} /> }
+      { ({image}) => <Image key={image.uuid} img={image} showButtons={true} /> }
     </IfFulfilled>
   </Screen>
   )

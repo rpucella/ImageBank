@@ -17,5 +17,9 @@ const Buttons = styled.div.attrs({className: 'buttons'})``
 
 const ButtonLink = styled.div.attrs({className: 'button is-link'})``
 
-export {Columns, ColumnOneThird, Column, Field, Control, Buttons, ButtonLink}
+const Content = styled.div.attrs({className: 'content'})``
+
+const ButtonSmallLink = styled.div.attrs({className: 'button is-small is-link'})``
+
+export {Columns, ColumnOneThird, Column, Field, Control, Buttons, ButtonLink, Content, ButtonSmallLink}
 
