@@ -1,5 +1,5 @@
 import React, {useState, useContext} from 'react'
-import {useAsync} from 'react-async'
+import {useAsync, IfFulfilled} from 'react-async'
 import styled from 'styled-components'
 import axios from 'axios'
 import {NavigationContext} from '../navigation-context'
@@ -35,7 +35,7 @@ const Dates = styled.div`
 
 const Image = ({img, showButtons}) => {
   const navigateTo = useContext(NavigationContext)
-  const { isPending, data, error } = useAsync({promiseFn: fetchImage, link: img.link})
+  const state = useAsync({promiseFn: fetchImage, link: img.link})
   const [ draft, setDraft ] = useState(img.draft)
   const clickPublish = async () => {
     await postImagePublish(img.uuid)
@@ -48,9 +48,10 @@ const Image = ({img, showButtons}) => {
   return (
     <Columns>
       <Column>
-        { data && <LinkImg src={data} width="100%" onLoad={() => URL.revokeObjectURL(data)}
-                           onClick={() => navigateTo('image', {uuid: img.uuid})} /> }
-        { error && <p>ERROR - {JSON.stringify(error)}</p> }
+        <IfFulfilled state={state}>
+	  { src => <LinkImg src={src} width="100%" onLoad={() => URL.revokeObjectURL(src)}
+                            onClick={() => navigateTo('image', {uuid: img.uuid})} /> }
+        </IfFulfilled>
       </Column>
       <Column>
         <Content>

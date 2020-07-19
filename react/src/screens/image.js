@@ -1,4 +1,4 @@
-import React, {useState, useCallback} from 'react'
+import React, {useCallback} from 'react'
 import {useAsync, IfFulfilled} from 'react-async'
 import axios from 'axios'
 import {Screen} from '../components/screen'
@@ -10,7 +10,6 @@ const fetchImage = async (uuid) => {
 }
 
 const ScreenImage = ({uuid}) => {
-  const [ page, setPage ] = useState(1)
   const fetch = useCallback(() => fetchImage(uuid), [uuid])
   const state = useAsync({promiseFn: fetch})
   return (

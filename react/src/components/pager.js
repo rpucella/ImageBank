@@ -1,7 +1,4 @@
-import React, {useState} from 'react'
-import {useAsync} from 'react-async'
-import styled from 'styled-components'
-import axios from 'axios'
+import React from 'react'
 import {Link} from './link'
 
 const Pager = ({page, total, setPage}) => 

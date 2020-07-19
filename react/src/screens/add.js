@@ -1,5 +1,4 @@
 import React, {useRef, useContext} from 'react'
-import styled from 'styled-components'
 import axios from 'axios'
 import {Screen} from '../components/screen'
 import {NavigationContext} from '../navigation-context'

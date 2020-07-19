@@ -1,9 +1,7 @@
 import React, {useState, useCallback, useContext} from 'react'
 import {useAsync, IfFulfilled} from 'react-async'
-import styled from 'styled-components'
 import axios from 'axios'
 import {Screen} from '../components/screen'
-import {Image} from '../components/image'
 import {NavigationContext} from '../navigation-context'
 import {Columns, ColumnOneThird, Column, Field, Control, Buttons, ButtonLink, Tag} from '../components/bulma'
 
