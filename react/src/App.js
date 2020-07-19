@@ -6,6 +6,7 @@ import {ScreenPublished} from './screens/published'
 import {ScreenDraft} from './screens/draft'
 import {ScreenTags} from './screens/tags'
 import {ScreenTag} from './screens/tag'
+import {ScreenNew} from './screens/new'
 import addSvg from './assets/add.svg'
 import {Link} from './components/link'
 
@@ -13,7 +14,8 @@ const _SCREENS = {
   published: ScreenPublished,
   draft: ScreenDraft,
   tags: ScreenTags,
-  tag: ScreenTag
+  tag: ScreenTag,
+  new: ScreenNew    
 }
 
 const ErrorMessage = styled.div`
@@ -51,7 +53,7 @@ const Header = () => {
           <Link onClick={() => navigateTo('draft')} className="navbar-item"> Drafts </Link>
           <Link onClick={() => navigateTo('new')} className="navbar-item"> New </Link>
           <Link onClick={() => navigateTo('tags')} className="navbar-item"> Tags </Link>
-          <Link onClick={() => navigateTo('note')} className="navbar-item"> Notes </Link>
+          { /* <Link onClick={() => navigateTo('note')} className="navbar-item"> Notes </Link> */ }
           <Link onClick={() => navigateTo('add')} className="navbar-item"> <span><img src={addSvg} height="12" width="12" /> Image</span> </Link>
         </div>
       </div>

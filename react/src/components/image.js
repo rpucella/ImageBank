@@ -30,7 +30,7 @@ const Image = ({img}) => {
               : 
                 <button className="button is-small is-link ib-draft" data-uid="{{img['uuid']}}">Draft</button>
             }
-           { img.tags.map((t) => <Link onClick={() => navigateTo('tag', {tag: t})} className="button is-rounded is-small is-link is-light">{t}</Link>) }
+            { img.tags.map((t) => <Link key={t} onClick={() => navigateTo('tag', {tag: t})} className="button is-rounded is-small is-link is-light">{t}</Link>) }
           </div>
         </div>
       </div>
