@@ -1,6 +1,5 @@
 const express = require('express');
-const nunjucks = require('nunjucks');
-const imagebank = require('../core/imagebank');
+const imagebank = require('./core/imagebank');
 const path = require('path');
 const busboy = require('express-busboy');
 
@@ -10,7 +9,6 @@ let _EXPECTED_VERSION = 2;
 const app = express();
 const port = 8501
 
-nunjucks.configure('./web/templates');
 busboy.extend(app, {
     upload: true,
     path: '/tmp/imagebank-upload'
@@ -31,13 +29,11 @@ async function run (folder) {
     }
 }
 
-app.get('/', (req, res) => {
-    res.redirect('/page/1');
-});
-
-app.get('/draft/', async (req, res) => {
-    res.redirect('/draft/1');
-});
+app.use(function(req, res, next) {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Headers', '*');
+  next();
+})
 
 app.get('/draft/:p', async (req, res) => {
     const p = parseInt(req.params.p) || 0;
@@ -48,43 +44,8 @@ app.get('/draft/:p', async (req, res) => {
 	const count = await imagebank.count_drafts(_FOLDER);
 	const results = await imagebank.drafts(_FOLDER, p);
 	const total_pages = Math.trunc((count - 1) / 10) + 1;
-	res.send(nunjucks.render('page.nj', { pagetitle: `Drafts`, images: results, page: p, total: total_pages, base: 'draft'}));
+	res.send({ pagetitle: `Drafts`, images: results, page: p, total: total_pages, base: 'draft'});
     }
-});
-
-app.get('/note/', async (req, res) => {
-    res.redirect('/note/1');
-});
-
-app.get('/note/:p', async (req, res) => {
-    const p = parseInt(req.params.p) || 0;
-    if (p < 1) {
-	res.redirect('/note');
-    }
-    else {
-	const count = await imagebank.count_notes(_FOLDER);
-	const results = await imagebank.notes(_FOLDER, p);
-	const total_pages = Math.trunc((count - 1) / 10) + 1;
-	res.send(nunjucks.render('notes.nj', { notes: results, page: p, total: total_pages, base: 'note'}));
-    }
-});
-
-app.post('/post/new-note', async (req, res) => {
-    const uuid = await imagebank.new_note(_FOLDER);
-    res.send(JSON.stringify({ uuid: uuid }));
-});
-
-app.post('/post/save-note', async (req, res) => {
-    const uuid = req.body.uuid;
-    let text = req.body.text;
-    text = text.replace(/\r/g, '').split('\n\n').map(t => t.trim());
-    await imagebank.save_note(_FOLDER, uuid, text);
-    res.send(JSON.stringify({ uuid: uuid }));
-});
-
-
-app.get('/new/', async (req, res) => {
-    res.redirect('/new/1');
 });
 
 app.get('/new/:p', async (req, res) => {
@@ -96,12 +57,8 @@ app.get('/new/:p', async (req, res) => {
 	const count = await imagebank.count_new(_FOLDER);
 	const results = await imagebank.drafts_new(_FOLDER, p);
 	const total_pages = Math.trunc((count - 1) / 16) + 1;
-	res.send(nunjucks.render('board.nj', { pagetitle: `New`, images: results, page: p, total: total_pages, base: 'new'}));
+	res.json({ pagetitle: `New`, images: results, page: p, total: total_pages, base: 'new'});
     }
-});
-
-app.get('/page', (req, res) => {
-    res.redirect('/page/1');
 });
 
 app.get('/page/:p', async (req, res) => {
@@ -113,17 +70,13 @@ app.get('/page/:p', async (req, res) => {
 	const count = await imagebank.count(_FOLDER);
 	const results = await imagebank.page(_FOLDER, p);
 	const total_pages = Math.trunc((count - 1) / 10) + 1;
-	res.send(nunjucks.render('page.nj', { pagetitle: `Published`, images: results, page: p, total: total_pages, base: 'page'}));
+	res.json({pagetitle: `Published`, images: results, page: p, total: total_pages, base: 'page'});
     }
 });
 
 app.get('/tag', async (req, res) => {
     const results = await imagebank.tags_all(_FOLDER);
-    res.send(nunjucks.render('tags.nj', { tags: results }));
-});
-
-app.get('/tag/:tag', (req, res) => {
-    res.redirect(`/tag/${req.params.tag}/1`);
+    res.json({ tags: results })
 });
 
 app.get('/tag/:tag/:p', async (req, res) => {
@@ -136,13 +89,13 @@ app.get('/tag/:tag/:p', async (req, res) => {
 	const count = await imagebank.count_tag(_FOLDER, tag);
 	const results = await imagebank.tag(_FOLDER, tag, p);
 	const total_pages = Math.trunc((count - 1) / 10) + 1;
-	res.send(nunjucks.render('page.nj', { pagetitle: `Tag: ${tag}`, images: results, page: p, total: total_pages, base: `tag/${tag}`}));
+	res.json({ pagetitle: `Tag: ${tag}`, images: results, page: p, total: total_pages, base: `tag/${tag}`});
     }
 });
 
 app.get('/image/:uuid', async (req, res) => {
     const result = await imagebank.image(_FOLDER, req.params.uuid);
-    res.send(nunjucks.render('image.nj', { image: result }));
+    res.json({ image: result });
 });
 
 app.get('/raw/:path', (req, res) => {
@@ -156,7 +109,7 @@ app.get('/add', (req, res) => {
 app.get('/edit/:uuid', async (req, res) => {
     const result = await imagebank.edit(_FOLDER, req.params.uuid);
     if (result) {
-	res.send(nunjucks.render('edit.nj', { image: result }));
+	res.send({ image: result });
     }
     else {
 	res.status(404).send(`No such UUID to edit: ${req.params.uuid}`);
@@ -198,12 +151,7 @@ app.post('/post/publish', async (req, res) => {
     res.send(JSON.stringify({ uid: uuid }));
 });
 
-app.get('/kill', (req, res) => {
-    process.exit();
-});
-
-app.use('/static', express.static(path.join(__dirname, 'static')));
-
+app.use(express.static('react/build'));
 
 if (process.argv.length > 2) {
     run(process.argv[2]);

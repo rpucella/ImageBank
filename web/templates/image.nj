@@ -1,8 +1,0 @@
-{% extends "layout.nj" %}
-
-
-{% block container %}
-
-  {{ imagerow(image) }}
-    
-{% endblock %}
