@@ -77,7 +77,6 @@ const Edit = ({img}) => {
 }
 
 const ScreenEdit = ({uuid}) => {
-  const [ page, setPage ] = useState(1)
   const fetch = useCallback(() => fetchImageMetadata(uuid), [uuid])
   const state = useAsync({promiseFn: fetch})
   return (

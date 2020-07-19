@@ -36,14 +36,6 @@ app.use(function(req, res, next) {
   next();
 })
 
-// app.get('/', (req, res) => {
-//     res.redirect('/page/1');
-// });
-
-// app.get('/draft/', async (req, res) => {
-//     res.redirect('/draft/1');
-// });
-
 app.get('/draft/:p', async (req, res) => {
     const p = parseInt(req.params.p) || 0;
     if (p < 1) {
@@ -88,10 +80,6 @@ app.post('/post/save-note', async (req, res) => {
 });
 
 
-// app.get('/new/', async (req, res) => {
-//     res.redirect('/new/1');
-// });
-
 app.get('/new/:p', async (req, res) => {
     const p = parseInt(req.params.p) || 0;
     if (p < 1) {
@@ -104,10 +92,6 @@ app.get('/new/:p', async (req, res) => {
 	res.json({ pagetitle: `New`, images: results, page: p, total: total_pages, base: 'new'});
     }
 });
-
-// app.get('/page', (req, res) => {
-//     res.redirect('/page/1');
-// });
 
 app.get('/page/:p', async (req, res) => {
     const p = parseInt(req.params.p) || 0;
@@ -126,10 +110,6 @@ app.get('/tag', async (req, res) => {
     const results = await imagebank.tags_all(_FOLDER);
     res.json({ tags: results })
 });
-
-// app.get('/tag/:tag', (req, res) => {
-//     res.redirect(`/tag/${req.params.tag}/1`);
-// });
 
 app.get('/tag/:tag/:p', async (req, res) => {
     const tag = req.params.tag || '';
@@ -202,13 +182,6 @@ app.post('/post/publish', async (req, res) => {
     await imagebank.publish_image(_FOLDER, uuid);
     res.send(JSON.stringify({ uid: uuid }));
 });
-
-app.get('/kill', (req, res) => {
-    process.exit();
-});
-
-app.use('/static', express.static(path.join(__dirname, 'static')));
-
 
 if (process.argv.length > 2) {
     run(process.argv[2]);
