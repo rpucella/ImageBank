@@ -1,13 +1,8 @@
 import React, {useCallback} from 'react'
 import {useAsync, IfFulfilled} from 'react-async'
-import axios from 'axios'
 import {Screen} from '../components/screen'
 import {Image} from '../components/image'
-
-const fetchImage = async (uuid) => {
-  const { data } = await axios.get(`http://localhost:8501/image/${uuid}`)
-  return data
-}
+import {fetchImage} from '../api'
 
 const ScreenImage = ({uuid}) => {
   const fetch = useCallback(() => fetchImage(uuid), [uuid])

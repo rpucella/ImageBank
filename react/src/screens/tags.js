@@ -1,14 +1,9 @@
 import React, {useContext} from 'react'
 import {useAsync, IfFulfilled} from 'react-async'
-import axios from 'axios'
 import {Screen} from '../components/screen'
 import {NavigationContext} from '../navigation-context'
 import {Field, Control, Buttons, TagLink} from '../components/bulma'
-
-const fetchTags = async () => {
-  const { data } = await axios.get(`http://localhost:8501/tag`)
-  return data
-}
+import {fetchTags} from '../api'
 
 const ScreenTags = () => {
   const state = useAsync({promiseFn: fetchTags})

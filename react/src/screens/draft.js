@@ -1,14 +1,9 @@
 import React, {useState, useCallback} from 'react'
 import {useAsync, IfFulfilled} from 'react-async'
-import axios from 'axios'
 import {Screen} from '../components/screen'
 import {Image} from '../components/image'
 import {Pager} from '../components/pager'
-
-const fetchDraft = async (page) => {
-  const { data } = await axios.get(`http://localhost:8501/draft/${page}`)
-  return data
-}
+import {fetchDraft} from '../api'
 
 const ScreenDraft = () => {
   const [ page, setPage ] = useState(1)

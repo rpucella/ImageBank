@@ -1,29 +1,11 @@
 import React, {useState, useContext} from 'react'
 import {useAsync, IfFulfilled} from 'react-async'
 import styled from 'styled-components'
-import axios from 'axios'
 import {NavigationContext} from '../navigation-context'
 import {Link} from './link'
 import {Columns, Column, Content, Field, Control, Buttons, ButtonSmallLink, TagSmallLink} from './bulma'
+import {fetchImageRaw, postImagePublish, postImageDraft} from '../api'
 
-const fetchImage = async ({link}) => {
-  const { data } = await axios.get('http://localhost:8501' + link, { responseType: 'blob'})
-  const result = URL.createObjectURL(data)
-  return result
-}
-
-const postImagePublish = async (uuid) => { 
-  const result = await axios.post('http://localhost:8501/post/publish',
-                                   {uid: uuid})
-  return result
-}
-				   
-const postImageDraft = async (uuid) => { 
-  const result = await axios.post('http://localhost:8501/post/draft',
-                                   {uid: uuid})
-  return result
-}
-				   
 const LinkImg = styled.img`
   cursor: pointer;
 `
@@ -35,7 +17,7 @@ const Dates = styled.div`
 
 const Image = ({img, showButtons}) => {
   const navigateTo = useContext(NavigationContext)
-  const state = useAsync({promiseFn: fetchImage, link: img.link})
+  const state = useAsync({promiseFn: fetchImageRaw, link: img.link})
   const [ draft, setDraft ] = useState(img.draft)
   const clickPublish = async () => {
     await postImagePublish(img.uuid)

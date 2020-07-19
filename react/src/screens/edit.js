@@ -1,26 +1,9 @@
 import React, {useState, useCallback, useContext} from 'react'
 import {useAsync, IfFulfilled} from 'react-async'
-import axios from 'axios'
 import {Screen} from '../components/screen'
 import {NavigationContext} from '../navigation-context'
 import {Columns, ColumnOneThird, Column, Field, Control, Buttons, ButtonLink, Tag} from '../components/bulma'
-
-const fetchImageMetadata = async (uuid) => {
-  const { data } = await axios.get(`http://localhost:8501/image/${uuid}`)
-  return data
-}
-
-const postImageMetadata = async (uuid, text, tags) => { 
-  const result = await axios.post('http://localhost:8501/post/edit',
-                                   {uid: uuid, text: text, tags: tags.join(' ;; ')})
-  return result
-}
-				   
-const fetchImage = async ({link}) => {
-  const { data } = await axios.get('http://localhost:8501' + link, { responseType: 'blob'})
-  const result = URL.createObjectURL(data)
-  return result
-}
+import {fetchImage, fetchImageRaw, postImage} from '../api'
 
 const TextEdit = ({value, onChange}) => {
   return <textarea className="textarea" value={value} rows={12} onChange={onChange} />
@@ -28,12 +11,12 @@ const TextEdit = ({value, onChange}) => {
 
 const Edit = ({img}) => {
   const navigateTo = useContext(NavigationContext)
-  const state = useAsync({promiseFn: fetchImage, link: img.link})
+  const state = useAsync({promiseFn: fetchImageRaw, link: img.link})
   const [ text, setText ] = useState(img.text)
   const [ tags, setTags ] = useState(img.tags)
   const handleTextChange = (event) => setText(event.target.value)
   const save = async () => {
-    await postImageMetadata(img.uuid, text, tags)
+    await postImage(img.uuid, text, tags)
     navigateTo('image', {uuid: img.uuid})
   }
   const addTag = () => {
@@ -75,7 +58,7 @@ const Edit = ({img}) => {
 }
 
 const ScreenEdit = ({uuid}) => {
-  const fetch = useCallback(() => fetchImageMetadata(uuid), [uuid])
+  const fetch = useCallback(() => fetchImage(uuid), [uuid])
   const state = useAsync({promiseFn: fetch})
   return (
   <Screen title={'Edit Image'}>

@@ -1,15 +1,10 @@
 import React, {useState, useCallback} from 'react'
 import {useAsync, IfFulfilled} from 'react-async'
 import styled from 'styled-components'
-import axios from 'axios'
 import {Screen} from '../components/screen'
 import {Pager} from '../components/pager'
 import {Thumbnail} from '../components/thumbnail'
-
-const fetchNew = async (page) => {
-  const { data } = await axios.get(`http://localhost:8501/new/${page}`)
-  return data
-}
+import {fetchNew} from '../api'
 
 const Board = styled.div`
   display: flex;

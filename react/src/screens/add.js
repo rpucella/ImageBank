@@ -1,15 +1,8 @@
 import React, {useRef, useContext} from 'react'
-import axios from 'axios'
 import {Screen} from '../components/screen'
 import {NavigationContext} from '../navigation-context'
 import {Field, Control, ButtonLink} from '../components/bulma'
-
-const postImageAdd = async (file) => {
-  const formData = new FormData()
-  formData.append('file', file)
-  const { data } = await axios.post('http://localhost:8501/post/add', formData)
-  return data
-}
+import {postImageAdd} from '../api'
 
 const ScreenAdd = () => {
   const navigateTo = useContext(NavigationContext)

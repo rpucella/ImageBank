@@ -4,11 +4,7 @@ import axios from 'axios'
 import {Screen} from '../components/screen'
 import {Image} from '../components/image'
 import {Pager} from '../components/pager'
-
-const fetchTag = async (tag, page) => {
-  const { data } = await axios.get(`http://localhost:8501/tag/${tag}/${page}`)
-  return data
-}
+import {fetchTag} from '../api'
 
 const ScreenTag = ({tag}) => {
   const [ page, setPage ] = useState(1)
