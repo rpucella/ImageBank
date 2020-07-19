@@ -29,6 +29,12 @@ const ErrorMessage = styled.div`
   color: red;
 `
 
+const Logo = styled.span`
+  font-weight: bold;
+  font-size: 130%;
+  font-variant: small-caps;
+`
+
 const Error = (screen) => () => (
   <ErrorMessage>
     Unknown screen: {screen}
@@ -42,7 +48,7 @@ const Header = () => {
 
       <div className="navbar-brand">
         <Link className="navbar-item" onClick={() => navigateTo('published')}>
-          <span className='logo'>ImageBank</span>
+          <Logo>ImageBank</Logo>
         </Link>
 
         <a role="button" className="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">

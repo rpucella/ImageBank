@@ -3,6 +3,7 @@ import {useAsync, IfFulfilled} from 'react-async'
 import axios from 'axios'
 import {Screen} from '../components/screen'
 import {NavigationContext} from '../navigation-context'
+import {Field, Control, Buttons, TagLink} from '../components/bulma'
 
 const fetchTags = async () => {
   const { data } = await axios.get(`http://localhost:8501/tag`)
@@ -16,13 +17,13 @@ const ScreenTags = () => {
   <Screen title={'Tags'}>
     <IfFulfilled state={state}>
       { ({tags})  => (
-            <div className="field">
-              <div className="control">
-                <div className="buttons">
-                  { tags.map(t => t.tag).sort().map(tag => <div key={tag} onClick={() => navigateTo('tag', {tag: tag})} className="button is-rounded is-link is-light">{ tag }</div>) }
-                </div>
-              </div>
-            </div>
+            <Field>
+              <Control>
+                <Buttons>
+                  { tags.map(t => t.tag).sort().map(tag => <TagLink key={tag} onClick={() => navigateTo('tag', {tag: tag})}> { tag } </TagLink>) }
+                </Buttons>
+              </Control>
+            </Field>
       )}
     </IfFulfilled>
   </Screen>

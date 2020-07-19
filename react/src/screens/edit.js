@@ -5,7 +5,7 @@ import axios from 'axios'
 import {Screen} from '../components/screen'
 import {Image} from '../components/image'
 import {NavigationContext} from '../navigation-context'
-import {Columns, ColumnOneThird, Column, Field, Control, Buttons, ButtonLink} from '../components/bulma'
+import {Columns, ColumnOneThird, Column, Field, Control, Buttons, ButtonLink, Tag} from '../components/bulma'
 
 const fetchImageMetadata = async (uuid) => {
   const { data } = await axios.get(`http://localhost:8501/image/${uuid}`)
@@ -67,7 +67,7 @@ const Edit = ({img}) => {
               <ButtonLink onClick={save}> Save </ButtonLink>
               <ButtonLink onClick={addTag}> Add Tag </ButtonLink>
               { tags.map(t => 
-              <span key={t} data-tag={t} className="button is-static is-rounded is-light ib-tag">{t}&nbsp;&nbsp;<button className="delete ib-delete" onClick={() => deleteTag(t)}></button> </span>) }
+              <Tag key={t} data-tag={t}> {t}&nbsp;&nbsp;<button className="delete ib-delete" onClick={() => deleteTag(t)}></button> </Tag>) }
             </Buttons>
           </Control>
         </Field>

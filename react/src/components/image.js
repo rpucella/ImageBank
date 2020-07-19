@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import axios from 'axios'
 import {NavigationContext} from '../navigation-context'
 import {Link} from './link'
-import {Columns, Column, Content, Field, Control, Buttons, ButtonSmallLink} from './bulma'
+import {Columns, Column, Content, Field, Control, Buttons, ButtonSmallLink, TagSmallLink} from './bulma'
 
 const fetchImage = async ({link}) => {
   const { data } = await axios.get('http://localhost:8501' + link, { responseType: 'blob'})
@@ -26,6 +26,11 @@ const postImageDraft = async (uuid) => {
 				   
 const LinkImg = styled.img`
   cursor: pointer;
+`
+
+const Dates = styled.div`
+  margin-top: 32px;
+  font-size: 75%;
 `
 
 const Image = ({img, showButtons}) => {
@@ -58,15 +63,15 @@ const Image = ({img, showButtons}) => {
                     <ButtonSmallLink onClick={clickPublish}> Publish </ButtonSmallLink> }
                 { showButtons && !draft && 
                     <ButtonSmallLink onClick={clickDraft}> Draft </ButtonSmallLink> }
-                { img.tags.map((t) => <Link key={t} onClick={() => navigateTo('tag', {tag: t})} className="button is-rounded is-small is-link is-light">{t}</Link>) }
+                { img.tags.map((t) => <TagSmallLink key={t} onClick={() => navigateTo('tag', {tag: t})}> {t} </TagSmallLink>) }
               </Buttons>
 	    </Control>
 	  </Field>
-          <div className="dates">
+          <Dates>
            <p>Created: { img['date_created'] }</p>
            <p>Updated: { img['date_updated'] }</p>
            { img.date_published && <p>Published: { img.date_published }</p> }
-	  </div>
+	  </Dates>
         </Content>
       </Column>
     </Columns>
