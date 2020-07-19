@@ -52,7 +52,7 @@ app.get('/draft/:p', async (req, res) => {
 	const count = await imagebank.count_drafts(_FOLDER);
 	const results = await imagebank.drafts(_FOLDER, p);
 	const total_pages = Math.trunc((count - 1) / 10) + 1;
-	res.send(nunjucks.render('page.nj', { pagetitle: `Drafts`, images: results, page: p, total: total_pages, base: 'draft'}));
+	res.send({ pagetitle: `Drafts`, images: results, page: p, total: total_pages, base: 'draft'});
     }
 });
 
@@ -100,7 +100,7 @@ app.get('/new/:p', async (req, res) => {
 	const count = await imagebank.count_new(_FOLDER);
 	const results = await imagebank.drafts_new(_FOLDER, p);
 	const total_pages = Math.trunc((count - 1) / 16) + 1;
-	res.send(nunjucks.render('board.nj', { pagetitle: `New`, images: results, page: p, total: total_pages, base: 'new'}));
+	res.json({ pagetitle: `New`, images: results, page: p, total: total_pages, base: 'new'});
     }
 });
 
@@ -117,13 +117,13 @@ app.get('/page/:p', async (req, res) => {
 	const count = await imagebank.count(_FOLDER);
 	const results = await imagebank.page(_FOLDER, p);
 	const total_pages = Math.trunc((count - 1) / 10) + 1;
-	res.json({pagetitle: `Published`, images: results, page: p, total: total_pages, base: 'page'})
+	res.json({pagetitle: `Published`, images: results, page: p, total: total_pages, base: 'page'});
     }
 });
 
 app.get('/tag', async (req, res) => {
     const results = await imagebank.tags_all(_FOLDER);
-    res.send(nunjucks.render('tags.nj', { tags: results }));
+    res.json({ tags: results })
 });
 
 app.get('/tag/:tag', (req, res) => {
@@ -140,13 +140,13 @@ app.get('/tag/:tag/:p', async (req, res) => {
 	const count = await imagebank.count_tag(_FOLDER, tag);
 	const results = await imagebank.tag(_FOLDER, tag, p);
 	const total_pages = Math.trunc((count - 1) / 10) + 1;
-	res.send(nunjucks.render('page.nj', { pagetitle: `Tag: ${tag}`, images: results, page: p, total: total_pages, base: `tag/${tag}`}));
+	res.json({ pagetitle: `Tag: ${tag}`, images: results, page: p, total: total_pages, base: `tag/${tag}`});
     }
 });
 
 app.get('/image/:uuid', async (req, res) => {
     const result = await imagebank.image(_FOLDER, req.params.uuid);
-    res.send(nunjucks.render('image.nj', { image: result }));
+    res.json({ image: result });
 });
 
 app.get('/raw/:path', (req, res) => {

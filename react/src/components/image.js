@@ -12,7 +12,7 @@ const Image = ({img}) => {
   const { isPending, data, error } = useAsync({promiseFn: fetchImage, link: img.link})
   return  <div className="columns">
     <div className="column">
-      { data && <img src={data} width="100%" /> }
+      { data && <img src={data} width="100%" onLoad={() => URL.revokeObjectURL(data)} /> }
       { error && <p>ERROR - {JSON.stringify(error)}</p> }
     </div>
     <div className="column">
