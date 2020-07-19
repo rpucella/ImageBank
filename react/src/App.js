@@ -1,12 +1,13 @@
 import React, {useState, useContext} from 'react'
 import styled from 'styled-components'
 import './bulma.min.css'
-import {NavigationContext} from './navigation-context.js'
+import {NavigationContext} from './navigation-context'
 import {ScreenPublished} from './screens/published'
 import {ScreenDraft} from './screens/draft'
 import {ScreenTags} from './screens/tags'
 import {ScreenTag} from './screens/tag'
 import addSvg from './assets/add.svg'
+import {Link} from './components/link'
 
 const _SCREENS = {
   published: ScreenPublished,
@@ -25,10 +26,6 @@ const Error = (screen) => () => (
     Unknown screen: {screen}
   </ErrorMessage>
 )
-
-const Link = styled.div`
-  cursor: pointer;
-`
 
 const Header = () => {
   const navigateTo = useContext(NavigationContext)

@@ -2,14 +2,11 @@ import React, {useState} from 'react'
 import {useAsync} from 'react-async'
 import styled from 'styled-components'
 import axios from 'axios'
+import {Link} from './link'
 
 const Pager = ({page, total, setPage}) => 
   total > 10 ? <FullPager page={page} total={total} setPage={setPage} />
              : <PartialPager page={page} total={total} setPage={setPage} />
-
-const Link = styled.div`
-  cursor: pointer;
-`
 
 const FullPager = ({page, total, setPage}) => {
   const start = (page - 3) > 1 ? (page - 3) : 1

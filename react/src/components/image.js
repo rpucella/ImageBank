@@ -1,6 +1,8 @@
-import React, {useState} from 'react'
+import React, {useState, useContext} from 'react'
 import {useAsync} from 'react-async'
 import axios from 'axios'
+import {NavigationContext} from '../navigation-context'
+import {Link} from './link'
 
 const fetchImage = async ({link}) => {
   const { data } = await axios.get('http://localhost:8501' + link, { responseType: 'blob'})
@@ -9,6 +11,7 @@ const fetchImage = async ({link}) => {
 }
 
 const Image = ({img}) => {
+  const navigateTo = useContext(NavigationContext)
   const { isPending, data, error } = useAsync({promiseFn: fetchImage, link: img.link})
   return  <div className="columns">
     <div className="column">
@@ -21,13 +24,13 @@ const Image = ({img}) => {
       <div className="field">
         <div className="control">
           <div className="buttons">
-            <a href="/edit/{{img['uuid']}}" className="button is-small is-link" id="button-edit">Edit</a>
+            <Link onClick={() => navigateTo('edit', {uuid: img.uuid})} className="button is-small is-link" id="button-edit">Edit</Link>
             { img.draft ? 
                 <button className="button is-small is-link ib-publish" data-uid="{{img['uuid']}}">Publish</button>
               : 
                 <button className="button is-small is-link ib-draft" data-uid="{{img['uuid']}}">Draft</button>
             }
-           { img.tags.map((t) => <a href="/tag/{{t}}" className="button is-rounded is-small is-link is-light">{t}</a>) }
+           { img.tags.map((t) => <Link onClick={() => navigateTo('tag', {tag: t})} className="button is-rounded is-small is-link is-light">{t}</Link>) }
           </div>
         </div>
       </div>
