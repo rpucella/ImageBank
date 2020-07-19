@@ -2,10 +2,12 @@ import React, {useState} from 'react'
 import styled from 'styled-components'
 import './bulma.min.css'
 import {ScreenPublished} from './screens/published'
+import {ScreenDraft} from './screens/draft'
 import addSvg from './assets/add.svg'
 
 const _SCREENS = {
-  published: ScreenPublished
+  published: ScreenPublished,
+  draft: ScreenDraft
 }
 
 const ErrorMessage = styled.div`
