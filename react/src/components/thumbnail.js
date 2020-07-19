@@ -16,11 +16,16 @@ const Layout = styled.div`
   padding: 8px;
 `
 
+const LinkImg = styled.img`
+  cursor: pointer;
+`
+
 const Thumbnail = ({img}) => {
   const navigateTo = useContext(NavigationContext)
   const { isPending, data, error } = useAsync({promiseFn: fetchImage, link: img.link})
   return  <Layout>
-    { data && <img src={data} width="100%" onLoad={() => URL.revokeObjectURL(data)} /> }
+    { data && <LinkImg src={data} width="100%" onLoad={() => URL.revokeObjectURL(data)}
+                       onClick={() => navigateTo('image', {uuid: img.uuid})} /> }
     { error && <p>ERROR - {JSON.stringify(error)}</p> }
   </Layout>
 }

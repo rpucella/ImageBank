@@ -87,8 +87,8 @@ app.post('/post/save-note', async (req, res) => {
 });
 
 
-app.get('/new/', async (req, res) => {
-    res.redirect('/new/1');
+#app.get('/new/', async (req, res) => {
+#    res.redirect('/new/1');
 });
 
 app.get('/new/:p', async (req, res) => {

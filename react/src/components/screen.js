@@ -2,7 +2,16 @@ import React from 'react'
 import styled from 'styled-components'
 
 const ScreenLayout = styled.div`
-  margin: 16px;
+  margin: 16px 40px;
+  display: flex;
+  flex-direction: row;
+`
+
+const Column = styled.div`
+  display: flex;
+  margin: 0 auto;
+  flex-direction: column;
+  max-width: 1200px;
 `
 
 const Title = styled.div`
@@ -12,8 +21,10 @@ const Title = styled.div`
 
 const Screen = ({title, children}) => (
   <ScreenLayout>
-    <Title>{title}</Title>
-    { children }
+    <Column>
+      <Title>{title}</Title>
+      { children }
+    </Column>
   </ScreenLayout>
 )
 

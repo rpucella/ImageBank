@@ -1,5 +1,6 @@
 import React, {useState, useContext} from 'react'
 import {useAsync} from 'react-async'
+import styled from 'styled-components'
 import axios from 'axios'
 import {NavigationContext} from '../navigation-context'
 import {Link} from './link'
@@ -10,12 +11,17 @@ const fetchImage = async ({link}) => {
   return result
 }
 
+const LinkImg = styled.img`
+  cursor: pointer;
+`
+
 const Image = ({img}) => {
   const navigateTo = useContext(NavigationContext)
   const { isPending, data, error } = useAsync({promiseFn: fetchImage, link: img.link})
   return  <div className="columns">
     <div className="column">
-      { data && <img src={data} width="100%" onLoad={() => URL.revokeObjectURL(data)} /> }
+      { data && <LinkImg src={data} width="100%" onLoad={() => URL.revokeObjectURL(data)}
+                         onClick={() => navigateTo('image', {uuid: img.uuid})} /> }
       { error && <p>ERROR - {JSON.stringify(error)}</p> }
     </div>
     <div className="column">

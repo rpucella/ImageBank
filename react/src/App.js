@@ -7,6 +7,7 @@ import {ScreenDraft} from './screens/draft'
 import {ScreenTags} from './screens/tags'
 import {ScreenTag} from './screens/tag'
 import {ScreenNew} from './screens/new'
+import {ScreenImage} from './screens/image'
 import addSvg from './assets/add.svg'
 import {Link} from './components/link'
 
@@ -15,7 +16,8 @@ const _SCREENS = {
   draft: ScreenDraft,
   tags: ScreenTags,
   tag: ScreenTag,
-  new: ScreenNew    
+  new: ScreenNew,
+  image: ScreenImage  
 }
 
 const ErrorMessage = styled.div`
