@@ -49,7 +49,7 @@ const Image = ({img, showButtons}) => {
       </Column>
       <Column>
         <Content>
-          { img.content.map((line) => <p key={line}>{line}</p>) }
+          { img.content.map((line, i) => <p key={line + i}>{line}</p>) }
           <Field>
 	    <Control>
 	      <Buttons>

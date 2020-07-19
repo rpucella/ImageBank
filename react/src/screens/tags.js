@@ -19,7 +19,7 @@ const ScreenTags = () => {
             <div className="field">
               <div className="control">
                 <div className="buttons">
-                { tags.map(t => <div key={t.tag} onClick={() => navigateTo('tag', {tag: t.tag})} className="button is-rounded is-link is-light">{ t.tag }</div>) }
+                  { tags.map(t => t.tag).sort().map(tag => <div key={tag} onClick={() => navigateTo('tag', {tag: tag})} className="button is-rounded is-link is-light">{ tag }</div>) }
                 </div>
               </div>
             </div>
