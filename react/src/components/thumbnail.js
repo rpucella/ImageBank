@@ -1,6 +1,6 @@
 import React, {useState, useContext} from 'react'
 import {useAsync} from 'react-async'
-oimport styled from 'styled-components'
+import styled from 'styled-components'
 import axios from 'axios'
 import {NavigationContext} from '../navigation-context'
 import {Link} from './link'
