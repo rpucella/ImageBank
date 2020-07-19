@@ -2,6 +2,7 @@ const express = require('express');
 const imagebank = require('../core/imagebank');
 const path = require('path');
 const busboy = require('express-busboy');
+const nunjucks = require('nunjucks');
 
 let _FOLDER = null;
 let _EXPECTED_VERSION = 2;
@@ -28,6 +29,11 @@ async function run (folder) {
 	app.listen(port, () => console.log(`Listening at http://localhost:${port}`));
     }
 }
+
+app.use(function(req, res, next) {
+  res.setHeader('Access-Control-Allow-Origin', '*')
+  next();
+})
 
 app.get('/', (req, res) => {
     res.redirect('/page/1');
@@ -111,7 +117,7 @@ app.get('/page/:p', async (req, res) => {
 	const count = await imagebank.count(_FOLDER);
 	const results = await imagebank.page(_FOLDER, p);
 	const total_pages = Math.trunc((count - 1) / 10) + 1;
-	res.send(nunjucks.render('page.nj', { pagetitle: `Published`, images: results, page: p, total: total_pages, base: 'page'}));
+	res.json({pagetitle: `Published`, images: results, page: p, total: total_pages, base: 'page'})
     }
 });
 
