@@ -151,6 +151,8 @@ app.post('/post/publish', async (req, res) => {
     res.send(JSON.stringify({ uid: uuid }));
 });
 
+app.use(express.static('react/build'));
+
 if (process.argv.length > 2) {
     run(process.argv[2]);
 }
