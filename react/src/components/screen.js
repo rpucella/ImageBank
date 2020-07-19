@@ -12,6 +12,7 @@ const Column = styled.div`
   margin: 0 auto;
   flex-direction: column;
   max-width: 1200px;
+  width: 1200px;
 `
 
 const Title = styled.div`

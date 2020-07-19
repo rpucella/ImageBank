@@ -31,17 +31,18 @@ async function run (folder) {
 }
 
 app.use(function(req, res, next) {
-  res.setHeader('Access-Control-Allow-Origin', '*')
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Headers', '*');
   next();
 })
 
-#app.get('/', (req, res) => {
-#    res.redirect('/page/1');
-#});
+// app.get('/', (req, res) => {
+//     res.redirect('/page/1');
+// });
 
-#app.get('/draft/', async (req, res) => {
-#    res.redirect('/draft/1');
-#});
+// app.get('/draft/', async (req, res) => {
+//     res.redirect('/draft/1');
+// });
 
 app.get('/draft/:p', async (req, res) => {
     const p = parseInt(req.params.p) || 0;
@@ -87,9 +88,9 @@ app.post('/post/save-note', async (req, res) => {
 });
 
 
-#app.get('/new/', async (req, res) => {
-#    res.redirect('/new/1');
-});
+// app.get('/new/', async (req, res) => {
+//     res.redirect('/new/1');
+// });
 
 app.get('/new/:p', async (req, res) => {
     const p = parseInt(req.params.p) || 0;
@@ -104,9 +105,9 @@ app.get('/new/:p', async (req, res) => {
     }
 });
 
-#app.get('/page', (req, res) => {
-#    res.redirect('/page/1');
-#});
+// app.get('/page', (req, res) => {
+//     res.redirect('/page/1');
+// });
 
 app.get('/page/:p', async (req, res) => {
     const p = parseInt(req.params.p) || 0;
@@ -126,9 +127,9 @@ app.get('/tag', async (req, res) => {
     res.json({ tags: results })
 });
 
-#app.get('/tag/:tag', (req, res) => {
-#    res.redirect(`/tag/${req.params.tag}/1`);
-#});
+// app.get('/tag/:tag', (req, res) => {
+//     res.redirect(`/tag/${req.params.tag}/1`);
+// });
 
 app.get('/tag/:tag/:p', async (req, res) => {
     const tag = req.params.tag || '';
@@ -160,7 +161,7 @@ app.get('/add', (req, res) => {
 app.get('/edit/:uuid', async (req, res) => {
     const result = await imagebank.edit(_FOLDER, req.params.uuid);
     if (result) {
-	res.send(nunjucks.render('edit.nj', { image: result }));
+	res.send({ image: result });
     }
     else {
 	res.status(404).send(`No such UUID to edit: ${req.params.uuid}`);
