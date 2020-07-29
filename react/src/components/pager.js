@@ -24,7 +24,7 @@ const FullPager = ({page, total, setPage}) => {
             <span className="pagination-ellipsis">&hellip;</span>      
           </li>
       }
-      { Array.from(new Array(end - start)).map((_, i) => {
+      { Array.from(new Array(end - start + 1)).map((_, i) => {
         const p = i + start
         const cls = 'pagination-link' + (p === page ? ' is-current' : '')
 	return (
