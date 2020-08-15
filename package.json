@@ -1,16 +1,21 @@
 {
   "name": "imagebank",
   "version": "1.0.0",
-  "main": "server.js",
+  "main": "electron/main.js",
   "scripts": {
-    "start": "node server.js",
+    "start-web": "node web/server.js",
+    "start": "electron .",
     "build": "cd react; yarn build"
   },
   "license": "CC0-1.0",
   "dependencies": {
     "express": "^4.17.1",
     "express-busboy": "^8.0.0",
-    "sqlite3": "^4.2.0",
+    "sqlite3": "^5.0.0",
     "uuid": "^8.0.0"
+  },
+  "devDependencies": {
+    "electron": "^9.2.0",
+    "electron-builder": "^22.8.0"
   }
 }
