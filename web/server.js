@@ -1,5 +1,5 @@
 const express = require('express');
-const imagebank = require('./core/imagebank');
+const imagebank = require('../core/imagebank');
 const path = require('path');
 const busboy = require('express-busboy');
 
