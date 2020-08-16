@@ -1,11 +1,12 @@
 {
-  "name": "imagebank",
+  "name": "ImageBank",
   "version": "1.0.0",
   "main": "electron/main.js",
   "scripts": {
     "start-web": "node web/server.js",
     "start": "electron .",
-    "build": "cd react; yarn build"
+    "build-react": "cd react; yarn build",
+    "build": "electron-builder"
   },
   "license": "CC0-1.0",
   "dependencies": {
@@ -17,5 +18,8 @@
   "devDependencies": {
     "electron": "^9.2.0",
     "electron-builder": "^22.8.0"
+  },
+  "build": {
+    "appId": "net.rpucella.imagebank"
   }
 }
