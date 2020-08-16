@@ -1,5 +1,5 @@
 const express = require('express');
-const imagebank = require('./core/imagebank');
+const imagebank = require('../core/imagebank');
 const path = require('path');
 const busboy = require('express-busboy');
 
@@ -14,19 +14,12 @@ busboy.extend(app, {
     path: '/tmp/imagebank-upload'
 });
 
-async function run (folder) {
-    _FOLDER = folder;
-    if (!_FOLDER.startsWith('/')) {
-	_FOLDER = path.join(process.cwd(), _FOLDER);
-    }
-    const version = await imagebank.version(_FOLDER);
-    if (version !== _EXPECTED_VERSION) {
-	console.log(`Wrong DB version - expected ${_EXPECTED_VERSION} but found ${version}`);
-	console.log('Aborting');
-    } else {
-	console.log(`Folder: ${_FOLDER}`);
-	app.listen(port, () => console.log(`Listening at http://localhost:${port}`));
-    }
+async function run (folder, root) {
+  // assume all checks have been made!
+  _FOLDER = folder;
+  app.use(express.static(path.join(root, 'react/build')));
+  process.send('ready');
+  app.listen(port, () => console.log(`Listening at http://localhost:${port}`));
 }
 
 app.use(function(req, res, next) {
@@ -151,11 +144,9 @@ app.post('/post/publish', async (req, res) => {
     res.send(JSON.stringify({ uid: uuid }));
 });
 
-app.use(express.static('react/build'));
-
-if (process.argv.length > 2) {
-    run(process.argv[2]);
+if (process.argv.length > 3) {
+  run(process.argv[2], process.argv[3]);
 }
 else {
-    console.log('USAGE: imagebank <folder>');
+  console.log('USAGE: imagebank <folder>');
 }

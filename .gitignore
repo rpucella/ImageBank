@@ -3,3 +3,5 @@ node_modules/
 *.pyc
 /run.sh
 /ignore/
+.DS_Store
+/dist/
