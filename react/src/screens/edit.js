@@ -62,26 +62,25 @@ const Edit = ({img}) => {
         </Field>
       </Column>
     </Columns>
-    <div className="modal {{dialog ? "is-active" : ""}}">
+    <div className={dialog ? "modal is-active" : "modal"}>
       <div className="modal-background" onClick={() => setDialog(false)}></div>
-        <div className="modal-content">
-          <div className"box">
+      <div className="modal-content">
+        <div className="box">
 
-            <div className"field">
-              <label className"label">Tag:</label>
-              <div className"control">
-                <input className"input" value={tag} type="text" onChange={handleTagChange}>
-              </div>
+          <div className="field">
+            <label className="label">Tag:</label>
+            <div className="control">
+              <input className="input" value={tag} type="text" onChange={handleTagChange} />
             </div>
+          </div>
       
-            <div className"field is-grouped mt-6">
-              <div className"control">
-                <button className"button is-link" onClick={addTag}>OK</button>
-              </div>
-              <div className"control">
-                <button className"button is-light" onClick={() => setDialog(false)}>Cancel</button>
-              </div>
-            </div>      
+          <div className="field is-grouped mt-6">
+            <div className="control">
+              <button className="button is-link" onClick={addTag}>OK</button>
+            </div>
+            <div className="control">
+              <button className="button is-light" onClick={() => setDialog(false)}>Cancel</button>
+            </div>
           </div>
         </div>
       </div>
