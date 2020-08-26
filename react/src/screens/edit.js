@@ -14,22 +14,30 @@ const Edit = ({img}) => {
   const state = useAsync({promiseFn: fetchImageRaw, link: img.link})
   const [ text, setText ] = useState(img.text)
   const [ tags, setTags ] = useState(img.tags)
+  const [ dialog, setDialog ] = useState(false)
+  const [ tag, setTag ] = useState('')
+  
   const handleTextChange = (event) => setText(event.target.value)
+  const handleTagChange = (event) => setTag(event.target.value)
   const save = async () => {
     await postImage(img.uuid, text, tags)
     navigateTo('image', {uuid: img.uuid})
   }
-  const addTag = () => {
-    const newtag = window.prompt('Tag to add:').trim();
-    if (!tags.includes(newtag)) {
-      setTags(tags.concat([newtag]))
-    }
+  const addTagDialog = () => {
+    setDialog(true)
   }
+  const addTag = () => {
+    setDialog(false)
+    if (!tags.includes(tag)) {
+      setTags(tags.concat([tag]))
+    }
+  }  
   const deleteTag = (tag) => {
     const newTags = tags.filter(t => t !== tag)
     setTags(newTags)
   }
   return (
+  <>  
     <Columns>
       <ColumnOneThird>
         <IfFulfilled state={state}>
@@ -46,7 +54,7 @@ const Edit = ({img}) => {
           <Control>
             <Buttons>
               <ButtonLink onClick={save}> Save </ButtonLink>
-              <ButtonLink onClick={addTag}> Add Tag </ButtonLink>
+              <ButtonLink onClick={addTagDialog}> Add Tag </ButtonLink>
               { tags.map(t => 
               <Tag key={t} data-tag={t}> {t}&nbsp;&nbsp;<button className="delete ib-delete" onClick={() => deleteTag(t)}></button> </Tag>) }
             </Buttons>
@@ -54,7 +62,31 @@ const Edit = ({img}) => {
         </Field>
       </Column>
     </Columns>
-  )  
+    <div className="modal {{dialog ? "is-active" : ""}}">
+      <div className="modal-background" onClick={() => setDialog(false)}></div>
+        <div className="modal-content">
+          <div className"box">
+
+            <div className"field">
+              <label className"label">Tag:</label>
+              <div className"control">
+                <input className"input" value={tag} type="text" onChange={handleTagChange}>
+              </div>
+            </div>
+      
+            <div className"field is-grouped mt-6">
+              <div className"control">
+                <button className"button is-link" onClick={addTag}>OK</button>
+              </div>
+              <div className"control">
+                <button className"button is-light" onClick={() => setDialog(false)}>Cancel</button>
+              </div>
+            </div>      
+          </div>
+        </div>
+      </div>
+    </div>
+  </>)  
 }
 
 const ScreenEdit = ({uuid}) => {
