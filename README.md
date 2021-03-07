@@ -4,11 +4,15 @@ A small project to maintain a bank of images with annotations. It fills a pretty
 
 ## Build Process
 
-To build the frontend:
+To build the frontend (in the `react/` directory):
 
     yarn build-react
 
-(This first builds the react frontend via `yarn build` in the `react/` directory.)
+To run the app in a web browser, start the server:
+
+    yarn start-web
+
+and point your browser to port 8501.
 
 To run the app via Electron after building the frontend:
 

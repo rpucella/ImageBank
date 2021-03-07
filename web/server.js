@@ -124,6 +124,12 @@ app.post('/post/add', async (req, res) => {
     res.send(JSON.stringify({ uid: uuid }));
 });
 
+app.post('/post/delete', async (req, res) => {
+    const uuid = req.body.uid
+    await imagebank.delete_image(_FOLDER, uuid)
+    res.send(JSON.stringify({ uid: uuid }));
+});
+
 app.post('/post/edit', async (req, res) => {
     const uuid = req.body.uid;
     let text = req.body.text;
