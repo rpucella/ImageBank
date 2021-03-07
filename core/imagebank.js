@@ -2,6 +2,7 @@ const dal = require('./dal');
 const uuidlib = require('uuid');
 const move = require('./move');
 const path = require('path');
+const fs = require('fs');
 
 function inject_link (img) {
     img.link = `/raw/${img.uuid}.${img.extension}`;
@@ -180,6 +181,13 @@ async function add_image (folder, file, filename) {
     return uuid;
 }
 
+async function delete_image (folder, uuid) {
+    await new dal.Tags(folder).delete_all_by_uuid(uuid)
+    const img = await new dal.Images(folder).read(uuid)
+    await new dal.Images(folder).delete(uuid)
+    fs.unlinkSync(path.join(folder, `${uuid}.${img.extension}`))
+}
+
 async function new_note (folder) {
     const uuid = uuidlib.v4();
     await new dal.Notes(folder).create({'uuid': uuid,
@@ -211,6 +219,7 @@ module.exports = {
     edit: edit,
     edit_image: edit_image,
     add_image: add_image,
+    delete_image: delete_image,
     draft_image: draft_image,
     publish_image: publish_image,
     count_notes: count_notes,

@@ -35,9 +35,15 @@ const fetchImage = async (uuid) => {
   return data
 }
 
-const postImage = async (uuid, text, tags) => { 
+const postImageEdit = async (uuid, text, tags) => { 
   const result = await axios.post('http://localhost:8501/post/edit',
                                    {uid: uuid, text: text, tags: tags.join(' ;; ')})
+  return result
+}
+
+const postImageDelete = async (uuid) => { 
+  const result = await axios.post('http://localhost:8501/post/delete',
+                                  {uid: uuid})
   return result
 }
 
@@ -62,4 +68,4 @@ const fetchTags = async () => {
 }
 
 export {fetchImageRaw, fetchImage, fetchDraft, fetchPublished, fetchNew, fetchTag, fetchTags,
-	postImagePublish, postImageDraft, postImageAdd, postImage}
+	postImagePublish, postImageDraft, postImageAdd, postImageEdit, postImageDelete}

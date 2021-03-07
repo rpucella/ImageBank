@@ -2,8 +2,8 @@ import React, {useState, useCallback, useContext} from 'react'
 import {useAsync, IfFulfilled} from 'react-async'
 import {Screen} from '../components/screen'
 import {NavigationContext} from '../navigation-context'
-import {Columns, ColumnOneThird, Column, Field, Control, Buttons, ButtonLink, Tag} from '../components/bulma'
-import {fetchImage, fetchImageRaw, postImage} from '../api'
+import {Columns, ColumnOneThird, Column, Field, Control, Buttons, ButtonLink, ButtonDanger, Tag} from '../components/bulma'
+import {fetchImage, fetchImageRaw, postImageEdit, postImageDelete} from '../api'
 
 const TextEdit = ({value, onChange}) => {
   return <textarea className="textarea" value={value} rows={12} onChange={onChange} />
@@ -15,15 +15,26 @@ const Edit = ({img}) => {
   const [ text, setText ] = useState(img.text)
   const [ tags, setTags ] = useState(img.tags)
   const [ dialog, setDialog ] = useState(false)
+  const [ confirmDelete, setConfirmDelete ] = useState(false)
   const [ tag, setTag ] = useState('')
   
   const handleTextChange = (event) => setText(event.target.value)
   const handleTagChange = (event) => setTag(event.target.value)
-  const save = async () => {
-    await postImage(img.uuid, text, tags)
+  const saveImage = async () => {
+    await postImageEdit(img.uuid, text, tags)
     navigateTo('image', {uuid: img.uuid})
   }
+  const deleteDialog = () => {
+    setConfirmDelete(true)
+  }
+  const deleteImage = async () => {
+    setConfirmDelete(false)
+    await postImageDelete(img.uuid)
+    // get back to default?
+    navigateTo('published')
+  }
   const addTagDialog = () => {
+    setTag('')
     setDialog(true)
   }
   const addTag = () => {
@@ -53,10 +64,11 @@ const Edit = ({img}) => {
         <Field>
           <Control>
             <Buttons>
-              <ButtonLink onClick={save}> Save </ButtonLink>
+              <ButtonLink onClick={saveImage}> Save </ButtonLink>
               <ButtonLink onClick={addTagDialog}> Add Tag </ButtonLink>
               { tags.map(t => 
               <Tag key={t} data-tag={t}> {t}&nbsp;&nbsp;<button className="delete ib-delete" onClick={() => deleteTag(t)}></button> </Tag>) }
+              <ButtonDanger onClick={deleteDialog}> Delete </ButtonDanger>
             </Buttons>
           </Control>
         </Field>
@@ -80,6 +92,26 @@ const Edit = ({img}) => {
             </div>
             <div className="control">
               <button className="button is-light" onClick={() => setDialog(false)}>Cancel</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div className={confirmDelete ? "modal is-active" : "modal"}>
+      <div className="modal-background" onClick={() => setConfirmDelete(false)}></div>
+      <div className="modal-content">
+        <div className="box">
+
+	  <div className="content">
+	    <p>Delete image?</p>
+	  </div>
+	  
+          <div className="field is-grouped mt-6">
+            <div className="control">
+              <button className="button is-link" onClick={deleteImage}>OK</button>
+            </div>
+            <div className="control">
+              <button className="button is-light" onClick={() => setConfirmDelete(false)}>Cancel</button>
             </div>
           </div>
         </div>
