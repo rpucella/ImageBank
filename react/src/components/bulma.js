@@ -17,6 +17,8 @@ const Buttons = styled.div.attrs({className: 'buttons'})``
 
 const ButtonLink = styled.div.attrs({className: 'button is-link'})``
 
+const ButtonDanger = styled.div.attrs({className: 'button is-danger'})``
+
 const Content = styled.div.attrs({className: 'content'})``
 
 const ButtonSmallLink = styled.div.attrs({className: 'button is-small is-link'})``
@@ -27,6 +29,6 @@ const TagSmallLink = styled.div.attrs({className: 'button is-rounded is-link is-
 
 const Tag = styled.div.attrs({className: 'button is-static is-rounded is-light'})``
 
-export {Columns, ColumnOneThird, Column, Field, Control, Buttons, ButtonLink, Content, ButtonSmallLink,
-	TagLink, TagSmallLink, Tag}
+export {Columns, ColumnOneThird, Column, Field, Control, Buttons, ButtonLink, ButtonDanger,
+	Content, ButtonSmallLink, TagLink, TagSmallLink, Tag}
 
