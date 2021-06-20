@@ -61,7 +61,7 @@ class Version {
 	const results = await this._run(`SELECT * FROM version LIMIT 1`, []);
 	if (results.length > 0) {
 	    throw 'Version # already exists';
-	}np
+	}
 	await this._run(`INSERT INTO version VALUES (?)`, [desc.version]);
         this._close();
     }

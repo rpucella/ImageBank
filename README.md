@@ -10,20 +10,34 @@ To build the frontend (in the `react/` directory):
 
 To run the app in a web browser, start the server:
 
-    yarn start-web
+    yarn start <folder> <port=8501>
 
-and point your browser to port 8501.
+and point your browser to the specified port (default: 8501).
+
+Running the app (either via Electron or as a standalone) requires a folder with `images.db` (the captions database) in it. 
+
+
+## Creating an Image Folder
+
+To create an image folder, run
+
+    yarn init <folder>
+
+It will create the folder and put in a default `images.db` file.
+
+
+## Electron
 
 To run the app via Electron after building the frontend:
 
-    yarn start
+    yarn start-electron
     
 To build a standalone version of the app for your OS/architecture after building the frontend:
 
-    yarn build
+    yarn build-electron
     
-Running the app (either via Electron or as a standalone) requires a folder with `images.db` (the captions database) in it. Your best bet right now is to grab `images.db` from `tests/` — haven't added the ability to start a new image database yet. (I know, I know...) 
-
 On Mac OS X, the app requires a configuration file in a `~/Library/Application Support/ImageBank/` folder called `appConfig.json` containing a JSON object with at least field `ImageBankFolder` containing the folder in which you have your `images.db` database.
 
-(Update 11/26/20: actually, this no longer works, since `test/images.db` is version 1 of the database file, and we're now on version 2. I need to create a new test. Or provide a convenient way to initialize a new image database.)
+Note that since moving to an M1 Mac, I cannot build a native ImageBank app, and so will not be updating this code.
+
+
