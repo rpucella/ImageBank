@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "main": "electron/main.js",
   "scripts": {
+    "create": "node web/create.js",
     "start": "node web/server.js",
     "build-react": "cd react; yarn build",
     "start-electron": "electron .", 

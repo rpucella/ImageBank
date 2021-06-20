@@ -7,14 +7,14 @@ let _FOLDER = null;
 let _EXPECTED_VERSION = 2;
 
 const app = express();
-const port = 8501
+const DEFAULT_PORT = 8501
 
 busboy.extend(app, {
     upload: true,
     path: '/tmp/imagebank-upload'
 });
 
-async function run (folder) {
+async function run (folder, port) {
     _FOLDER = folder;
     if (!_FOLDER.startsWith('/')) {
 	_FOLDER = path.join(process.cwd(), _FOLDER);
@@ -24,7 +24,6 @@ async function run (folder) {
 	console.log(`Wrong DB version - expected ${_EXPECTED_VERSION} but found ${version}`);
 	console.log('Aborting');
     } else {
-	console.log(`Folder: ${_FOLDER}`);
 	app.listen(port, () => console.log(`Listening at http://localhost:${port}`));
     }
 }
@@ -159,9 +158,12 @@ app.post('/post/publish', async (req, res) => {
 
 app.use(express.static('react/build'));
 
-if (process.argv.length > 2) {
-    run(process.argv[2]);
+if (process.argv.length > 3) {
+  run(process.argv[2], +process.argv[3])
+}
+else if (process.argv.length > 2) { 
+  run(process.argv[2], DEFAULT_PORT)
 }
 else {
-    console.log('USAGE: imagebank <folder>');
+  console.log(`USAGE: imagebank <folder> <port=${DEFAULT_PORT}>`);
 }
