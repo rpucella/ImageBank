@@ -1,4 +1,5 @@
 const dal = require('./dal');
+const create = require('./create');
 const uuidlib = require('uuid');
 const move = require('./move');
 const path = require('path');
@@ -203,6 +204,13 @@ async function save_note (folder, uuid, text) {
     note.content = text
     await new dal.Notes(folder).update(note)
 }
+
+async function create_db(folder, version) {
+  await create.create_db(folder)
+  await new dal.Version(folder).create({
+    version: version
+  })
+}
     
 module.exports = {
     version: version,
@@ -225,5 +233,6 @@ module.exports = {
     count_notes: count_notes,
     notes: notes,
     new_note: new_note,
-    save_note: save_note
+    save_note: save_note,
+    create_db: create_db
 }
