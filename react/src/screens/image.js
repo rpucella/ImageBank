@@ -11,8 +11,8 @@ const ScreenImage = ({uuid}) => {
   return (
     <Screen title={'Image ' + uuid}>
       <nav className="pagination" role="navigation" aria-label="pagination">
-	<Link className="pagination-previous" onClick={null}> Previous </Link>
-	<Link className="pagination-next" onClick={null}> Next </Link>
+	<Link className="pagination-previous" onClick={null} disabled={true}> Previous </Link>
+	<Link className="pagination-next" onClick={null} disabled={true}> Next </Link>
       </nav>
       <IfFulfilled state={state}>
 	{ ({image}) => <Image key={image.uuid} img={image} showButtons={true} /> }
