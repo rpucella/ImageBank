@@ -1,4 +1,3 @@
-import React from 'react'
 import styled from 'styled-components'
 
 // styled components abstracting away some bulma junk

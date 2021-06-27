@@ -4,7 +4,8 @@
   "scripts": {
     "create": "node web/create.js",
     "start": "node web/server.js",
-    "build-react": "cd react; yarn build"
+    "build": "cd react; yarn build",
+    "go": "cd react; yarn build; cd ..; node web/server.js"
   },
   "license": "CC0-1.0",
   "dependencies": {

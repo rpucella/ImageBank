@@ -1,6 +1,6 @@
-import React, {useState, useContext} from 'react'
+import React, {useState} from 'react'
 import styled from 'styled-components'
-import {NavigationContext} from '../navigation-context'
+import {navigate} from '@reach/router'
 import {Link} from './link'
 import addSvg from '../assets/add.svg'
 
@@ -11,15 +11,14 @@ const Logo = styled.span`
 `
 
 export const Header = () => {
-  const navigateTo = useContext(NavigationContext)
   const [showMenu, setShowMenu] = useState(false)
   const toggleMenu = () => setShowMenu(!showMenu)
-  const goTo = (dest) => () => { setShowMenu(false); navigateTo(dest) }
+  const goTo = (dest) => () => { setShowMenu(false); navigate(dest) }
   return (
     <nav className="navbar is-tablet" role="navigation" aria-label="main navigation">
 
       <div className="navbar-brand">
-        <Link className="navbar-item" onClick={goTo('published')}>
+        <Link className="navbar-item" onClick={goTo('/published/1')}>
           <Logo>ImageBank</Logo>
         </Link>
 
@@ -33,12 +32,12 @@ export const Header = () => {
       
       <div id="navbarMenu" className={showMenu ? "navbar-menu is-active" : "navbar-menu"}>
         <div className="navbar-start">
-          <Link onClick={goTo('published')} className="navbar-item"> Published </Link>
-          <Link onClick={goTo('draft')} className="navbar-item"> Drafts </Link>
-          <Link onClick={goTo('new')} className="navbar-item"> New </Link>
-          <Link onClick={goTo('tags')} className="navbar-item"> Tags </Link>
+          <Link onClick={goTo('/published/1')} className="navbar-item"> Published </Link>
+          <Link onClick={goTo('/draft/1')} className="navbar-item"> Drafts </Link>
+          <Link onClick={goTo('/new/1')} className="navbar-item"> New </Link>
+          <Link onClick={goTo('/tags')} className="navbar-item"> Tags </Link>
           { /* <Link onClick={goTo('note')} className="navbar-item"> Notes </Link> */ }
-          <Link onClick={goTo('add')} className="navbar-item"> <span><img src={addSvg} height="12" width="12" /> Image</span> </Link>
+          <Link onClick={goTo('/add')} className="navbar-item"> <span><img src={addSvg} height="12" width="12" /> Image</span> </Link>
         </div>
       </div>
     </nav>

@@ -9,7 +9,7 @@ const ScreenImage = ({uuid}) => {
   const fetch = useCallback(() => fetchImage(uuid), [uuid])
   const state = useAsync({promiseFn: fetch})
   return (
-    <Screen title={'Image ' + uuid}>
+    <Screen title="">
       <nav className="pagination" role="navigation" aria-label="pagination">
 	<Link className="pagination-previous" onClick={null} disabled={true}> Previous </Link>
 	<Link className="pagination-next" onClick={null} disabled={true}> Next </Link>
