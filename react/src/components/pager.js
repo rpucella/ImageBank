@@ -54,17 +54,19 @@ const PartialPager = ({page, total, setPage}) =>  {
   const switchTo = (p) => () => setPage(p)
   const prevEnabled = (page > 1)
   const nextEnabled = (page < total)
-  return <nav className="pagination" role="navigation" aria-label="pagination">
-    <Link className="pagination-previous" onClick={prevEnabled && switchTo(page - 1)} disabled={!prevEnabled}> Previous </Link>
-    <Link className="pagination-next" onClick={nextEnabled && switchTo(page + 1)} disabled={!nextEnabled}> Next </Link>
-    <ul className="pagination-list">
-      { Array.from(new Array(total)).map((_, i) => {
+  return (
+    <nav className="pagination" role="navigation" aria-label="pagination">
+      <Link className="pagination-previous" onClick={prevEnabled && switchTo(page - 1)} disabled={!prevEnabled}> Previous </Link>
+      <Link className="pagination-next" onClick={nextEnabled && switchTo(page + 1)} disabled={!nextEnabled}> Next </Link>
+      <ul className="pagination-list">
+	{ Array.from(new Array(total)).map((_, i) => {
           const p = i + 1
 	  const cls = 'pagination-link' + (p === page ? ' is-current' : '')
           return <li key={'page' + p}><Link className={cls} onClick={switchTo(p)}> {p} </Link></li>
-      }) }
-    </ul>
-  </nav>
+	}) }
+      </ul>
+    </nav>
+  )
 }
 
 export {Pager}

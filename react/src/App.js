@@ -1,7 +1,7 @@
-import React, {useState, useContext} from 'react'
+import React, {useState} from 'react'
 import styled from 'styled-components'
 import './bulma.min.css'
-import {NavigationContext} from './navigation-context'
+import {Router, Redirect} from '@reach/router'
 import {ScreenPublished} from './screens/published'
 import {ScreenDraft} from './screens/draft'
 import {ScreenTags} from './screens/tags'
@@ -10,41 +10,28 @@ import {ScreenNew} from './screens/new'
 import {ScreenImage} from './screens/image'
 import {ScreenEdit} from './screens/edit'
 import {ScreenAdd} from './screens/add'
-import {Link} from './components/link'
 import {Header} from './components/header'
 
-const _SCREENS = {
-  published: ScreenPublished,
-  draft: ScreenDraft,
-  tags: ScreenTags,
-  tag: ScreenTag,
-  new: ScreenNew,
-  image: ScreenImage,
-  edit: ScreenEdit,
-  add: ScreenAdd
-}
-
-const ErrorMessage = styled.div`
-  margin: 16px;
-  color: red;
-`
-
-const Error = (screen) => () => (
-  <ErrorMessage>
-    Unknown screen: {screen}
-  </ErrorMessage>
-)
-
 const App = () => {
-    const [screenObj, setScreen] = useState({name: 'published', args: {}})
-    const navigateTo = (name, args) => setScreen({name: name, args : args || {}})
-    const Screen = _SCREENS[screenObj.name] || Error(screenObj.name)
-    return (
-      <NavigationContext.Provider value={navigateTo}>
-        <Header /> 
-        <Screen {... screenObj.args} />
-      </NavigationContext.Provider>
-    )
+  return (
+    <>
+      <Header />
+      <Router>
+	<ScreenPublished path="/published/:page" />
+	<ScreenDraft path="/draft/:page" />
+	<ScreenNew path="/new/:page" />
+	<ScreenTags path="/tags" />
+	<ScreenTag path="/tags/:tag" />
+	<ScreenImage path="/image/:uuid" />
+	<ScreenEdit path="/image/:uuid/edit" />
+	<ScreenAdd path="/add" />
+	<Redirect from="/" to="/published/1" />
+	<Redirect from="/new" to="/new/1" />
+	<Redirect from="/published" to="/published/1" />
+	<Redirect from="/draft" to="/draft/1" />
+      </Router>
+    </>
+  )
 }
 
 export default App

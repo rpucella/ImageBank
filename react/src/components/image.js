@@ -1,7 +1,7 @@
-import React, {useState, useContext} from 'react'
+import React, {useState} from 'react'
 import {useAsync, IfFulfilled} from 'react-async'
 import styled from 'styled-components'
-import {NavigationContext} from '../navigation-context'
+import {navigate} from '@reach/router'
 import {Link} from './link'
 import {Columns, Column, Content, Field, Control, Buttons, ButtonSmallLink, TagSmallLink} from './bulma'
 import {fetchImageRaw, postImagePublish, postImageDraft} from '../api'
@@ -16,7 +16,6 @@ const Dates = styled.div`
 `
 
 const Image = ({img, showButtons}) => {
-  const navigateTo = useContext(NavigationContext)
   const state = useAsync({promiseFn: fetchImageRaw, link: img.link})
   const [ draft, setDraft ] = useState(img.draft)
   const clickPublish = async () => {
@@ -32,7 +31,7 @@ const Image = ({img, showButtons}) => {
       <Column>
         <IfFulfilled state={state}>
 	  { src => <LinkImg src={src} width="100%" onLoad={() => URL.revokeObjectURL(src)}
-                            onClick={() => navigateTo('image', {uuid: img.uuid})} /> }
+                            onClick={() => navigate(`/image/${img.uuid}`)} /> }
         </IfFulfilled>
       </Column>
       <Column>
@@ -41,12 +40,12 @@ const Image = ({img, showButtons}) => {
           <Field>
 	    <Control>
 	      <Buttons>
-                { showButtons && <Link onClick={() => navigateTo('edit', {uuid: img.uuid})} className="button is-small is-link" id="button-edit">Edit</Link> }
+                { showButtons && <Link onClick={() => navigate(`/image/${img.uuid}/edit`)} className="button is-small is-link" id="button-edit">Edit</Link> }
                 { showButtons && draft && 
                     <ButtonSmallLink onClick={clickPublish}> Publish </ButtonSmallLink> }
                 { showButtons && !draft && 
                     <ButtonSmallLink onClick={clickDraft}> Draft </ButtonSmallLink> }
-                { img.tags.map((t) => <TagSmallLink key={t} onClick={() => navigateTo('tag', {tag: t})}> {t} </TagSmallLink>) }
+                { img.tags.map((t) => <TagSmallLink key={t} onClick={() => navigate(`/tag/${t}`)}> {t} </TagSmallLink>) }
               </Buttons>
 	    </Control>
 	  </Field>

@@ -1,14 +1,18 @@
-import React, {useState, useCallback} from 'react'
+import React, {useCallback} from 'react'
 import {useAsync, IfFulfilled} from 'react-async'
+import {navigate} from '@reach/router'
 import {Screen} from '../components/screen'
 import {Image} from '../components/image'
 import {Pager} from '../components/pager'
 import {fetchPublished} from '../api'
 
-const ScreenPublished = () => {
-  const [ page, setPage ] = useState(1)
+const ScreenPublished = ({page}) => {
   const fetch = useCallback(() => fetchPublished(page), [page])
   const state = useAsync({promiseFn: fetch})
+  const setPage = (p) => {
+    navigate(`/published/${p}`)
+  }
+  page = parseInt(page)
   return (
   <Screen title={'Published'}>
     <IfFulfilled state={state}>

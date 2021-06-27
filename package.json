@@ -1,13 +1,11 @@
 {
   "name": "ImageBank",
   "version": "1.0.0",
-  "main": "electron/main.js",
   "scripts": {
     "create": "node web/create.js",
     "start": "node web/server.js",
-    "build-react": "cd react; yarn build",
-    "start-electron": "electron .", 
-    "build-electron": "electron-builder"
+    "build": "cd react; yarn build",
+    "go": "cd react; yarn build; cd ..; node web/server.js"
   },
   "license": "CC0-1.0",
   "dependencies": {
@@ -15,12 +13,5 @@
     "express-busboy": "^8.0.0",
     "sqlite3": "^5.0.0",
     "uuid": "^8.0.0"
-  },
-  "devDependencies": {
-    "electron": "^11.0.0",
-    "electron-builder": "^22.10.4"
-  },
-  "build": {
-    "appId": "net.rpucella.imagebank"
   }
 }

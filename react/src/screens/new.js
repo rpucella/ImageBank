@@ -1,6 +1,7 @@
-import React, {useState, useCallback} from 'react'
+import React, {useCallback} from 'react'
 import {useAsync, IfFulfilled} from 'react-async'
 import styled from 'styled-components'
+import {navigate} from '@reach/router'
 import {Screen} from '../components/screen'
 import {Pager} from '../components/pager'
 import {Thumbnail} from '../components/thumbnail'
@@ -13,24 +14,27 @@ const Board = styled.div`
   align-items: center;
 `
 
-const ScreenNew = () => {
-  const [ page, setPage ] = useState(1)
+const ScreenNew = ({page}) => {
   const fetch = useCallback(() => fetchNew(page), [page])
   const state = useAsync({promiseFn: fetch})
+  const setPage = (p) => {
+    navigate(`/new/${p}`)
+  }
+  page = parseInt(page)
   return (
-  <Screen title={'New'}>
-    <IfFulfilled state={state}>
-      { ({images, total})  => (
+    <Screen title={'New'}>
+      <IfFulfilled state={state}>
+	{ ({images, total})  => (
           <>
             <Pager page={page} setPage={setPage} total={total} />
 	    <Board>  
-               { images.map((img) => <Thumbnail key={img.uuid} img={img} />) }
+              { images.map((img) => <Thumbnail key={img.uuid} img={img} />) }
 	    </Board>
             <Pager page={page} setPage={setPage} total={total} />
           </>
-      )}
-    </IfFulfilled>
-  </Screen>
+	)}
+      </IfFulfilled>
+    </Screen>
   )
 }
 

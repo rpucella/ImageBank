@@ -34,7 +34,7 @@ app.use(function(req, res, next) {
   next();
 })
 
-app.get('/draft/:p', async (req, res) => {
+app.get('/api/draft/:p', async (req, res) => {
     const p = parseInt(req.params.p) || 0;
     if (p < 1) {
 	res.redirect('/draft');
@@ -47,7 +47,7 @@ app.get('/draft/:p', async (req, res) => {
     }
 });
 
-app.get('/new/:p', async (req, res) => {
+app.get('/api/new/:p', async (req, res) => {
     const p = parseInt(req.params.p) || 0;
     if (p < 1) {
 	res.redirect('/new');
@@ -60,7 +60,7 @@ app.get('/new/:p', async (req, res) => {
     }
 });
 
-app.get('/page/:p', async (req, res) => {
+app.get('/api/page/:p', async (req, res) => {
     const p = parseInt(req.params.p) || 0;
     if (p < 1) {
 	res.redirect('/page');
@@ -73,12 +73,12 @@ app.get('/page/:p', async (req, res) => {
     }
 });
 
-app.get('/tag', async (req, res) => {
+app.get('/api/tag', async (req, res) => {
     const results = await imagebank.tags_all(_FOLDER);
     res.json({ tags: results })
 });
 
-app.get('/tag/:tag/:p', async (req, res) => {
+app.get('/api/tag/:tag/:p', async (req, res) => {
     const tag = req.params.tag || '';
     const p = parseInt(req.params.p) || 0;
     if (p < 1) {
@@ -92,20 +92,16 @@ app.get('/tag/:tag/:p', async (req, res) => {
     }
 });
 
-app.get('/image/:uuid', async (req, res) => {
+app.get('/api/image/:uuid', async (req, res) => {
     const result = await imagebank.image(_FOLDER, req.params.uuid);
     res.json({ image: result });
 });
 
-app.get('/raw/:path', (req, res) => {
+app.get('/api/raw/:path', (req, res) => {
     res.sendFile(path.join(_FOLDER, req.params.path));
 });
 
-app.get('/add', (req, res) => {
-    res.send(nunjucks.render('add.nj'));
-});
-
-app.get('/edit/:uuid', async (req, res) => {
+app.get('/api/edit/:uuid', async (req, res) => {
     const result = await imagebank.edit(_FOLDER, req.params.uuid);
     if (result) {
 	res.send({ image: result });
@@ -115,7 +111,7 @@ app.get('/edit/:uuid', async (req, res) => {
     }
 });
 
-app.post('/post/add', async (req, res) => {
+app.post('/api/post/add', async (req, res) => {
     const upload = req.files.file;
     const filename = upload.filename;
     const file = upload.file;
@@ -123,13 +119,13 @@ app.post('/post/add', async (req, res) => {
     res.send(JSON.stringify({ uid: uuid }));
 });
 
-app.post('/post/delete', async (req, res) => {
+app.post('/api/post/delete', async (req, res) => {
     const uuid = req.body.uid
     await imagebank.delete_image(_FOLDER, uuid)
     res.send(JSON.stringify({ uid: uuid }));
 });
 
-app.post('/post/edit', async (req, res) => {
+app.post('/api/post/edit', async (req, res) => {
     const uuid = req.body.uid;
     let text = req.body.text;
     let tags = req.body.tags;
@@ -144,19 +140,24 @@ app.post('/post/edit', async (req, res) => {
     res.send(JSON.stringify({ uid: uuid }));
 });
 
-app.post('/post/draft', async (req, res) => {
+app.post('/api/post/draft', async (req, res) => {
     const uuid = req.body.uid;
     await imagebank.draft_image(_FOLDER, uuid);
     res.send(JSON.stringify({ uid: uuid }));
 });
 
-app.post('/post/publish', async (req, res) => {
+app.post('/api/post/publish', async (req, res) => {
     const uuid = req.body.uid;
     await imagebank.publish_image(_FOLDER, uuid);
     res.send(JSON.stringify({ uid: uuid }));
 });
 
-app.use(express.static('react/build'));
+app.use(express.static(path.join(__dirname + '/../react/build')))
+
+// anything that doesn't match the above gets redirected to react-router
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname + '/../react/build/index.html'))
+})
 
 if (process.argv.length > 3) {
   run(process.argv[2], +process.argv[3])

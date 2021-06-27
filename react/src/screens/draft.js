@@ -1,16 +1,20 @@
-import React, {useState, useCallback} from 'react'
+import React, {useCallback} from 'react'
 import {useAsync, IfFulfilled} from 'react-async'
+import {navigate} from '@reach/router'
 import {Screen} from '../components/screen'
 import {Image} from '../components/image'
 import {Pager} from '../components/pager'
 import {fetchDraft} from '../api'
 
-const ScreenDraft = () => {
-  const [ page, setPage ] = useState(1)
+const ScreenDraft = ({page}) => {
   const fetch = useCallback(() => fetchDraft(page), [page])
   const state = useAsync({promiseFn: fetch})
+  const setPage = (p) => {
+    navigate(`/draft/${p}`)
+  }
+  page = parseInt(page)
   return (
-  <Screen title={'Draft'}>
+  <Screen title={'Drafts'}>
     <IfFulfilled state={state}>
       { ({images, total})  => (
           <>
