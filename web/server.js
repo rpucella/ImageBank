@@ -119,6 +119,12 @@ app.post('/api/post/add', async (req, res) => {
     res.send(JSON.stringify({ uid: uuid }));
 });
 
+app.post('/api/post/add-url', async (req, res) => {
+  const url = req.body.url
+  const uuid = await imagebank.add_image_url(_FOLDER, url);
+  res.send(JSON.stringify({ uid: uuid }));
+});
+
 app.post('/api/post/delete', async (req, res) => {
     const uuid = req.body.uid
     await imagebank.delete_image(_FOLDER, uuid)

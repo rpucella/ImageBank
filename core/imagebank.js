@@ -4,6 +4,7 @@ const uuidlib = require('uuid');
 const move = require('./move');
 const path = require('path');
 const fs = require('fs');
+const axios = require('axios');
 
 function inject_link (img) {
     img.link = `/raw/${img.uuid}.${img.extension}`;
@@ -182,6 +183,40 @@ async function add_image (folder, file, filename) {
     return uuid;
 }
 
+async function downloadImage(url, p) {
+  const writer = fs.createWriteStream(p)
+  const response = await axios({
+    url,
+    method: 'GET',
+    responseType: 'stream'
+  })
+  response.data.pipe(writer)
+  return new Promise((resolve, reject) => {
+    writer.on('finish', resolve)
+    writer.on('error', reject)
+  })
+}
+
+async function add_image_url (folder, url) {
+  const uuid = uuidlib.v4()
+  const {headers} = await axios.head(url)
+  let extension
+  const contentType = headers['content-type']
+  if (contentType === 'image/jpeg') {
+    extension = 'jpeg'
+  }
+  else {
+    throw `Unrecognized MIME type ${contentType}`
+  }
+  const p = path.join(folder, `${uuid}.${extension}`)
+  await downloadImage(url, p)
+  await new dal.Images(folder).create({'uuid': uuid,
+				       'extension': extension,
+				       'content': [],
+				       'draft': true})
+  return uuid
+}
+
 async function delete_image (folder, uuid) {
     await new dal.Tags(folder).delete_all_by_uuid(uuid)
     const img = await new dal.Images(folder).read(uuid)
@@ -234,5 +269,6 @@ module.exports = {
     notes: notes,
     new_note: new_note,
     save_note: save_note,
-    create_db: create_db
+    create_db: create_db,
+    add_image_url: add_image_url
 }

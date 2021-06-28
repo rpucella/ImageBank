@@ -25,6 +25,12 @@ const postImageAdd = async (file) => {
   return data
 }
 
+const postImageAddURL = async (url) => {
+  const { data } = await axios.post('/api/post/add-url',
+				    {url})
+  return data
+}
+
 const fetchDraft = async (page) => {
   const { data } = await axios.get(`/api/draft/${page}`)
   return data
@@ -68,4 +74,5 @@ const fetchTags = async () => {
 }
 
 export {fetchImageRaw, fetchImage, fetchDraft, fetchPublished, fetchNew, fetchTag, fetchTags,
-	postImagePublish, postImageDraft, postImageAdd, postImageEdit, postImageDelete}
+	postImagePublish, postImageDraft, postImageAdd, postImageEdit, postImageDelete,
+	postImageAddURL}
