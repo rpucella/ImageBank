@@ -205,7 +205,11 @@ async function add_image_url (folder, url) {
   if (contentType === 'image/jpeg') {
     extension = 'jpeg'
   }
+  else if (contentType === 'image/png') {
+    extension = 'png'
+  }
   else {
+    console.log(`Unrecognized MIME type ${contentType}`)
     throw `Unrecognized MIME type ${contentType}`
   }
   const p = path.join(folder, `${uuid}.${extension}`)
