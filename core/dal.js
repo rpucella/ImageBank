@@ -335,8 +335,9 @@ class Images {
 	if (limit === 'undefined') {
 	    limit = 10;
 	}
-	this._connect();
-	let results = await this._run(`SELECT * FROM images WHERE draft = 1 AND (content IS NULL OR content = '') ORDER BY datetime(date_updated) desc LIMIT ? OFFSET ?`, [limit, offset]);
+        this._connect();
+        // new pictures are ordered by creation date...
+	let results = await this._run(`SELECT * FROM images WHERE draft = 1 AND (content IS NULL OR content = '') ORDER BY datetime(date_created) desc LIMIT ? OFFSET ?`, [limit, offset]);
 	results = results.map(r => this._process_row(r));
 	this._close();
 	return results;
@@ -350,6 +351,36 @@ class Images {
 		throw `Too many rows ${results.length} for UUID ${uuid}`;
 	    }
             return this._process_row(results[0]);
+	}
+    }
+
+    async read_previous (uuid) {
+	this._connect();
+	const results = await this._run(`SELECT * FROM images WHERE uuid = ?` , [uuid]);
+        if (results.length > 0) {
+	    if (results.length > 1) {
+		throw `Too many rows ${results.length} for UUID ${uuid}`;
+	    }
+	    const date = results[0].date_created
+	    const results2 = await this._run(`SELECT * FROM images WHERE date_created < ? ORDER BY date_created DESC LIMIT 1`, [date])
+            if (results2.length > 0) {
+		return this._process_row(results2[0]);
+	    }
+	}
+    }
+
+    async read_next (uuid) {
+	this._connect();
+	const results = await this._run(`SELECT * FROM images WHERE uuid = ?` , [uuid]);
+        if (results.length > 0) {
+	    if (results.length > 1) {
+		throw `Too many rows ${results.length} for UUID ${uuid}`;
+	    }
+	    const date = results[0].date_created
+	    const results2 = await this._run(`SELECT * FROM images WHERE date_created > ? ORDER BY date_created ASC LIMIT 1`, [date])
+            if (results2.length > 0) {
+		return this._process_row(results2[0]);
+	    }
 	}
     }
 }

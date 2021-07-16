@@ -115,10 +115,14 @@ async function tag (folder, t, p) {
 
 async function image (folder, uuid) {
     const image = await new dal.Images(folder).read(uuid);
+    const previous = await new dal.Images(folder).read_previous(uuid);
+    const next = await new dal.Images(folder).read_next(uuid);
     const tags = await new dal.Tags(folder).read_by_uuid(uuid);
     const dtags = group_tags_by_uuid(tags);
     inject_link(image);
     inject_tags(image, dtags);
+    image.previous = previous?.uuid;
+    image.next = next?.uuid;
     return image;
 }
 
