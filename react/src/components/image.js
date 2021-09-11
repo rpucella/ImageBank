@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useCallback} from 'react'
 import {useAsync, IfFulfilled} from 'react-async'
 import styled from 'styled-components'
 import {navigate} from '@reach/router'
@@ -16,7 +16,8 @@ const Dates = styled.div`
 `
 
 const Image = ({img, showButtons}) => {
-  const state = useAsync({promiseFn: fetchImageRaw, link: img.link})
+  const fetch = useCallback(() => fetchImageRaw(img.uuid), [img.uuid])
+  const state = useAsync({promiseFn: fetch})
   const [ draft, setDraft ] = useState(img.draft)
   const clickPublish = async () => {
     await postImagePublish(img.uuid)

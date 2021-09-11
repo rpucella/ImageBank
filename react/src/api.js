@@ -1,7 +1,7 @@
 import axios from 'axios'
 
-const fetchImageRaw = async ({link}) => {
-  const { data } = await axios.get('/api' + link, { responseType: 'blob'})
+const fetchImageRaw = async (uuid) => {
+  const { data } = await axios.get(`/raw/${uuid}`, { responseType: 'blob'})
   const result = URL.createObjectURL(data)
   return result
 }

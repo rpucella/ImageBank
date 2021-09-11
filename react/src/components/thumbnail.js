@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useCallback} from 'react'
 import {useAsync, IfFulfilled} from 'react-async'
 import {navigate} from '@reach/router'
 import styled from 'styled-components'
@@ -14,7 +14,8 @@ const LinkImg = styled.img`
 `
 
 const Thumbnail = ({img}) => {
-  const state  = useAsync({promiseFn: fetchImageRaw, link: img.link})
+  const fetch = useCallback(() => fetchImageRaw(img.uuid), [img.uuid])
+  const state = useAsync({promiseFn: fetch})
   return  <Layout>
     <IfFulfilled state={state}>
       { src => <LinkImg src={src} width="100%" onLoad={() => URL.revokeObjectURL(src)}

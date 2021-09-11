@@ -10,7 +10,8 @@ const TextEdit = ({value, onChange}) => {
 }
 
 const Edit = ({img}) => {
-  const state = useAsync({promiseFn: fetchImageRaw, link: img.link})
+  const fetch = useCallback(() => fetchImageRaw(img.uuid), [img.uuid])
+  const state = useAsync({promiseFn: fetch})
   const [ text, setText ] = useState(img.text)
   const [ tags, setTags ] = useState(img.tags)
   const [ dialog, setDialog ] = useState(false)
