@@ -5,6 +5,7 @@ import {navigate} from '@reach/router'
 import {Link} from './link'
 import {Columns, Column, Content, Field, Control, Buttons, ButtonSmallLink, TagSmallLink} from './bulma'
 import {fetchImageRaw, postImagePublish, postImageDraft} from '../api'
+import {formatDate} from '../util'
 
 const LinkImg = styled.img`
   cursor: pointer;
@@ -43,17 +44,17 @@ const Image = ({img, showButtons}) => {
 	      <Buttons>
                 { showButtons && <Link onClick={() => navigate(`/image/${img.uuid}/edit`)} className="button is-small is-link" id="button-edit">Edit</Link> }
                 { showButtons && draft && 
-                    <ButtonSmallLink onClick={clickPublish}> Publish </ButtonSmallLink> }
+                  <ButtonSmallLink onClick={clickPublish}> Publish </ButtonSmallLink> }
                 { showButtons && !draft && 
-                    <ButtonSmallLink onClick={clickDraft}> Draft </ButtonSmallLink> }
+                  <ButtonSmallLink onClick={clickDraft}> Draft </ButtonSmallLink> }
                 { img.tags.map((t) => <TagSmallLink key={t} onClick={() => navigate(`/tag/${t}`)}> {t} </TagSmallLink>) }
               </Buttons>
 	    </Control>
 	  </Field>
           <Dates>
-           <p>Created: { img['date_created'] }</p>
-           <p>Updated: { img['date_updated'] }</p>
-           { img.date_published && <p>Published: { img.date_published }</p> }
+            <p>Created: { formatDate(img.date_created) }</p>
+            <p>Updated: { formatDate(img.date_updated) }</p>
+            { img.date_published && <p>Published: { formatDate(img.date_published) }</p> }
 	  </Dates>
         </Content>
       </Column>
