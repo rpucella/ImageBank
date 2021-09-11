@@ -10,11 +10,6 @@ MIME_EXTENSIONS = {
   'image/png': ['png']
 }
 
-function inject_link (img) {
-  img.link = `/raw/${img.uuid}`
-  img.text = img.content.join('\n\n')
-}
-
 function inject_tags (img, dtags) {
   img.tags = dtags[img.uuid] || []
 }
@@ -39,7 +34,6 @@ async function drafts (folder, p) {
   const tags = await new dal.Tags(folder).read_by_uuids(results.map(r => r.uuid))
   const dtags = group_tags_by_uuid(tags)
   for (let r of results) {
-    inject_link(r)
     inject_tags(r, dtags)
   }
   return results
@@ -51,7 +45,6 @@ async function drafts_new (folder, p) {
   const tags = await new dal.Tags(folder).read_by_uuids(results.map(r => r.uuid))
   const dtags = group_tags_by_uuid(tags)
   for (let r of results) {
-    inject_link(r)
     inject_tags(r, dtags)
   }
   return results
@@ -83,7 +76,6 @@ async function page (folder, p) {
   const tags = await new dal.Tags(folder).read_by_uuids(results.map(r => r.uuid))
   const dtags = group_tags_by_uuid(tags)
   for (let r of results) {
-    inject_link(r)
     inject_tags(r, dtags)
   }
   return results
@@ -100,7 +92,6 @@ async function tag (folder, t, p) {
   const tags = await new dal.Tags(folder).read_by_uuids(results.map(r => r.uuid))
   const dtags = group_tags_by_uuid(tags)
   for (let r of results) {
-    inject_link(r)
     inject_tags(r, dtags)
   }
   return results
@@ -112,7 +103,6 @@ async function image (folder, uuid) {
   const next = await new dal.Images(folder).read_next(uuid)
   const tags = await new dal.Tags(folder).read_by_uuid(uuid)
   const dtags = group_tags_by_uuid(tags)
-  inject_link(image)
   inject_tags(image, dtags)
   image.previous = previous?.uuid
   image.next = next?.uuid
@@ -126,7 +116,6 @@ async function edit (folder, uuid) {
   }
   const tags = await new dal.Tags(folder).read_by_uuid(uuid)
   const dtags = group_tags_by_uuid(tags)
-  inject_link(img)
   inject_tags(img, dtags)
   return img
 }
