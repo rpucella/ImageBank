@@ -5,6 +5,11 @@ const path = require('path')
 const fs = require('fs')
 const axios = require('axios')
 
+MIME_EXTENSIONS = {
+  'image/jpeg': ['jpeg', 'jpg'],
+  'image/png': ['png']
+}
+
 function inject_link (img) {
   img.link = `/raw/${img.uuid}`
   img.text = img.content.join('\n\n')
@@ -165,13 +170,13 @@ async function add_image (folder, file, filename) {
   const m = f.match(/.*\.([^.]*)$/)
   const extension = m[1]
   let contentType
-  if (extension === 'jpeg' || extension === 'jpg') {
-    contentType = 'image/jpeg'
+  for (const ct of Object.keys(MIME_EXTENSIONS)) {
+    if (MIME_EXTENSIONS[ct].includes(extension)) {
+      contentType = ct
+      break
+    }
   }
-  else if (extension === 'png') {
-    contentType = 'image/png'
-  }
-  else {
+  if (!contentType) {
     console.log(`Unrecognized extension ${extension}`)
     throw `Unrecognized extension ${extension}`
   }
@@ -198,7 +203,7 @@ async function add_image_url (folder, url) {
   const uuid = uuidlib.v4()
   const {headers} = await axios.head(url)
   const contentType = headers['content-type']
-  if (contentType !== 'image/jpeg' && contentType !== 'image/png') {
+  if (!MIME_EXTENSIONS[contentType]) {
     console.log(`Unrecognized MIME type ${contentType}`)
     throw `Unrecognized MIME type ${contentType}`
   }
