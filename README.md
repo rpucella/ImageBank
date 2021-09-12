@@ -6,27 +6,55 @@ A small project to maintain a bank of images with annotations. It fills a pretty
 
 To build the frontend (in the `react/` directory):
 
-    yarn build-react
+    yarn build
 
 To run the app in a web browser, start the server:
 
-    yarn start <folder> <port=8501>
+    yarn start <db-file> <port=8501>
 
 and point your browser to the specified port (default: 8501).
 
-Running the app (either via Electron or as a standalone) requires a folder with `images.db` (the captions database) in it. 
+Running the app (either via Electron or as a standalone) requires a database file (the captions database).
 
 
-## Creating an Image Folder
+## Creating an Image Database
 
-To create an image folder, run
+To create an image databse, run
 
-    yarn init <folder>
+    yarn run create <db-file>
 
-It will create the folder and put in a default `images.db` file.
+
+## Installing the server as a user agent under Mac OS X
+
+Create a property list file `net.rpucella.imagebank.plist` in `~/Library/LaunchAgents/` such as:
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+    <plist version="1.0">
+    <dict>
+        <key>Label</key>
+        <string>net.rpucella.imagebank</string>
+        <key>WorkingDirectory</key>
+        <string> {{path to imagebank root}} </string>
+        <key>ProgramArguments</key>
+        <array>
+            <string>/opt/homebrew/bin/node</string>
+            <string>web/server.js</string>
+            <string> {{path to database file}} </string>
+        </array>
+        <key>KeepAlive</key>
+        <true/>
+    </dict>
+    </plist>
+
+It should be picked up next login. To run the service before the next login, try:
+
+    launchctl load ~/Library/LaunchAgents/net.rpucella.imagebank.plist
 
 
 ## Electron
+
+(Not maintained)
 
 To run the app via Electron after building the frontend:
 
