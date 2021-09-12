@@ -35,7 +35,7 @@ export const Header = () => {
           <Link onClick={goTo('/published/1')} className="navbar-item"> Published </Link>
           <Link onClick={goTo('/draft/1')} className="navbar-item"> Drafts </Link>
           <Link onClick={goTo('/new/1')} className="navbar-item"> New </Link>
-          <Link onClick={goTo('/tags')} className="navbar-item"> Tags </Link>
+          <Link onClick={goTo('/tag')} className="navbar-item"> Tags </Link>
           { /* <Link onClick={goTo('note')} className="navbar-item"> Notes </Link> */ }
           <Link onClick={goTo('/add')} className="navbar-item"> <span><img src={addSvg} height="12" width="12" /> Image</span> </Link>
         </div>
