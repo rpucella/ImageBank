@@ -6,7 +6,7 @@ import addSvg from '../assets/add.svg'
 
 const Logo = styled.span`
   font-weight: bold;
-  font-size: 130%;
+  font-size: 150%;
   font-variant: small-caps;
 `
 

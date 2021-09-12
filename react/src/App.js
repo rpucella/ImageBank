@@ -1,6 +1,7 @@
 import React, {useState} from 'react'
 import styled from 'styled-components'
 import './bulma.min.css'
+import './global.css'
 import {Router, Redirect} from '@reach/router'
 import {ScreenPublished} from './screens/published'
 import {ScreenDraft} from './screens/draft'
