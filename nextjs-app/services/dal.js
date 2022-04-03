@@ -289,7 +289,7 @@ export class Images {
       limit = 10
     }
     this._connect()
-    let results = await this._run(`SELECT * FROM images WHERE draft = 0 ORDER BY datetime(date_published) desc LIMIT ? OFFSET ?`, [limit, offset])
+    let results = await this._run(`SELECT * FROM images WHERE draft = 0 ORDER BY date_published desc LIMIT ? OFFSET ?`, [limit, offset])
     results = results.map(r => this._process_row(r))
     this._close()
     return results
@@ -303,7 +303,7 @@ export class Images {
       limit = 10
     }
     this._connect()
-    let results = await this._run(`SELECT * FROM images WHERE uuid IN (SELECT uuid FROM tags WHERE tag = ?) AND draft = 0 ORDER BY datetime(date_published) desc LIMIT ? OFFSET ?`, [tag, limit, offset])
+    let results = await this._run(`SELECT * FROM images WHERE uuid IN (SELECT uuid FROM tags WHERE tag = ?) AND draft = 0 ORDER BY date_published desc LIMIT ? OFFSET ?`, [tag, limit, offset])
     results = results.map(r => this._process_row(r))
     this._close()
     return results
@@ -317,7 +317,7 @@ export class Images {
       limit = 10
     }
     this._connect()
-    let results = await this._run(`SELECT * FROM images WHERE draft = 1 AND content IS NOT NULL AND content <> '' ORDER BY datetime(date_updated) desc LIMIT ? OFFSET ?`, [limit, offset])
+    let results = await this._run(`SELECT * FROM images WHERE draft = 1 AND content IS NOT NULL AND content <> '' ORDER BY date_updated desc LIMIT ? OFFSET ?`, [limit, offset])
     results = results.map(r => this._process_row(r))
     this._close()
     return results
@@ -332,7 +332,7 @@ export class Images {
     }
     this._connect()
     // new pictures are ordered by creation date...
-    let results = await this._run(`SELECT * FROM images WHERE draft = 1 AND (content IS NULL OR content = '') ORDER BY datetime(date_created) desc LIMIT ? OFFSET ?`, [limit, offset])
+    let results = await this._run(`SELECT * FROM images WHERE draft = 1 AND (content IS NULL OR content = '') ORDER BY date_created desc LIMIT ? OFFSET ?`, [limit, offset])
     results = results.map(r => this._process_row(r))
     this._close()
     return results

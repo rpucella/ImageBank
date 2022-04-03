@@ -47,14 +47,18 @@ Create a property list file `net.rpucella.imagebank.plist` in `~/Library/LaunchA
     </dict>
     </plist>
 
-It should be picked up next login. To run the service before the next login, try:
+It should be picked up next login.
 
+To stop/start manually:
+
+    launchctl unload ~/Library/LaunchAgents/net.rpucella.imagebank.plist
+    
     launchctl load ~/Library/LaunchAgents/net.rpucella.imagebank.plist
-
+    
 
 ## Electron
 
-(Not maintained)
+(Obsolete -- and not maintained)
 
 To run the app via Electron after building the frontend:
 
@@ -69,3 +73,6 @@ On Mac OS X, the app requires a configuration file in a `~/Library/Application S
 Note that since moving to an M1 Mac, I cannot build a native ImageBank app, and so will not be updating this code.
 
 
+## Next.js
+
+A new version is in the works. Stay tuned.

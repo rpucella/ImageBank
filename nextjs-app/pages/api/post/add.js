@@ -15,7 +15,7 @@ export default async function handler(req, res) {
     form.uploadDir = '/tmp'
     form.keepExtensions = true
     form.parse(req, async (err, fields, files) => {
-      console.log(err, fields, files)
+      ///console.log(err, fields, files)
       const upload = files.file
       const filename = upload.originalFilename
       const file = upload.filepath
