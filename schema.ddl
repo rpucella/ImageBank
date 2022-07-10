@@ -9,30 +9,11 @@ CREATE TABLE IF NOT EXISTS tags (
 
 CREATE TABLE IF NOT EXISTS images (
   uuid text,
-  extension text,
+  mime text,
+  image blob,
   content text,
-  date_created text,   -- was `timestamp`
+  date_created text,
   date_updated text,
   date_published text,
-  draft int
+  draft int  
 );
-
-CREATE TABLE IF NOT EXISTS notes (
-  uuid text,
-  content text,
-  date_updated text
-);
-
-
--- v1
--- 
--- CREATE TABLE IF NOT EXISTS images (
---   uuid text,
---   extension text,
---   content text,
---   ordinal int, 
---   timestamp text,
---   draft int
--- );
-
-

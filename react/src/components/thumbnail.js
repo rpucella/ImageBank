@@ -1,7 +1,7 @@
-import React, {useContext} from 'react'
+import React, {useCallback} from 'react'
 import {useAsync, IfFulfilled} from 'react-async'
+import {navigate} from '@reach/router'
 import styled from 'styled-components'
-import {NavigationContext} from '../navigation-context'
 import {fetchImageRaw} from '../api'
 
 const Layout = styled.div`
@@ -14,12 +14,12 @@ const LinkImg = styled.img`
 `
 
 const Thumbnail = ({img}) => {
-  const navigateTo = useContext(NavigationContext)
-  const state  = useAsync({promiseFn: fetchImageRaw, link: img.link})
+  const fetch = useCallback(() => fetchImageRaw(img.uuid), [img.uuid])
+  const state = useAsync({promiseFn: fetch})
   return  <Layout>
     <IfFulfilled state={state}>
       { src => <LinkImg src={src} width="100%" onLoad={() => URL.revokeObjectURL(src)}
-                        onClick={() => navigateTo('image', {uuid: img.uuid})} /> }
+                        onClick={() => navigate(`/image/${img.uuid}`)} /> }
     </IfFulfilled>
   </Layout>
 }

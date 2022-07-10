@@ -1,7 +1,7 @@
-import React, {useState, useCallback, useContext} from 'react'
+import React, {useState, useCallback} from 'react'
 import {useAsync, IfFulfilled} from 'react-async'
+import {navigate} from '@reach/router'
 import {Screen} from '../components/screen'
-import {NavigationContext} from '../navigation-context'
 import {Columns, ColumnOneThird, Column, Field, Control, Buttons, ButtonLink, ButtonDanger, Tag} from '../components/bulma'
 import {fetchImage, fetchImageRaw, postImageEdit, postImageDelete} from '../api'
 
@@ -10,9 +10,9 @@ const TextEdit = ({value, onChange}) => {
 }
 
 const Edit = ({img}) => {
-  const navigateTo = useContext(NavigationContext)
-  const state = useAsync({promiseFn: fetchImageRaw, link: img.link})
-  const [ text, setText ] = useState(img.text)
+  const fetch = useCallback(() => fetchImageRaw(img.uuid), [img.uuid])
+  const state = useAsync({promiseFn: fetch})
+  const [ text, setText ] = useState(img.content.join('\n\n'))
   const [ tags, setTags ] = useState(img.tags)
   const [ dialog, setDialog ] = useState(false)
   const [ confirmDelete, setConfirmDelete ] = useState(false)
@@ -22,7 +22,7 @@ const Edit = ({img}) => {
   const handleTagChange = (event) => setTag(event.target.value)
   const saveImage = async () => {
     await postImageEdit(img.uuid, text, tags)
-    navigateTo('image', {uuid: img.uuid})
+    navigate(`/image/${img.uuid}`)
   }
   const deleteDialog = () => {
     setConfirmDelete(true)
@@ -31,7 +31,7 @@ const Edit = ({img}) => {
     setConfirmDelete(false)
     await postImageDelete(img.uuid)
     // get back to default?
-    navigateTo('published')
+    navigate('/published')
   }
   const addTagDialog = () => {
     setTag('')

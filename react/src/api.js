@@ -1,19 +1,19 @@
 import axios from 'axios'
 
-const fetchImageRaw = async ({link}) => {
-  const { data } = await axios.get('http://localhost:8501' + link, { responseType: 'blob'})
+const fetchImageRaw = async (uuid) => {
+  const { data } = await axios.get(`/raw/${uuid}`, { responseType: 'blob'})
   const result = URL.createObjectURL(data)
   return result
 }
 
 const postImagePublish = async (uuid) => { 
-  const result = await axios.post('http://localhost:8501/post/publish',
+  const result = await axios.post('/api/post/publish',
                                    {uid: uuid})
   return result
 }
 				   
 const postImageDraft = async (uuid) => { 
-  const result = await axios.post('http://localhost:8501/post/draft',
+  const result = await axios.post('/api/post/draft',
                                    {uid: uuid})
   return result
 }
@@ -21,51 +21,58 @@ const postImageDraft = async (uuid) => {
 const postImageAdd = async (file) => {
   const formData = new FormData()
   formData.append('file', file)
-  const { data } = await axios.post('http://localhost:8501/post/add', formData)
+  const { data } = await axios.post('/api/post/add', formData)
+  return data
+}
+
+const postImageAddURL = async (url) => {
+  const { data } = await axios.post('/api/post/add-url',
+				    {url})
   return data
 }
 
 const fetchDraft = async (page) => {
-  const { data } = await axios.get(`http://localhost:8501/draft/${page}`)
+  const { data } = await axios.get(`/api/draft/${page}`)
   return data
 }
 
 const fetchImage = async (uuid) => {
-  const { data } = await axios.get(`http://localhost:8501/image/${uuid}`)
+  const { data } = await axios.get(`/api/image/${uuid}`)
   return data
 }
 
 const postImageEdit = async (uuid, text, tags) => { 
-  const result = await axios.post('http://localhost:8501/post/edit',
+  const result = await axios.post('/api/post/edit',
                                    {uid: uuid, text: text, tags: tags.join(' ;; ')})
   return result
 }
 
 const postImageDelete = async (uuid) => { 
-  const result = await axios.post('http://localhost:8501/post/delete',
+  const result = await axios.post('/api/post/delete',
                                   {uid: uuid})
   return result
 }
 
 const fetchNew = async (page) => {
-  const { data } = await axios.get(`http://localhost:8501/new/${page}`)
+  const { data } = await axios.get(`/api/new/${page}`)
   return data
 }
 
 const fetchPublished = async (page) => {
-  const { data } = await axios.get(`http://localhost:8501/page/${page}`)
+  const { data } = await axios.get(`/api/page/${page}`)
   return data
 }
 
 const fetchTag = async (tag, page) => {
-  const { data } = await axios.get(`http://localhost:8501/tag/${tag}/${page}`)
+  const { data } = await axios.get(`/api/tag/${tag}/${page}`)
   return data
 }
 
 const fetchTags = async () => {
-  const { data } = await axios.get(`http://localhost:8501/tag`)
+  const { data } = await axios.get(`/api/tag`)
   return data
 }
 
 export {fetchImageRaw, fetchImage, fetchDraft, fetchPublished, fetchNew, fetchTag, fetchTags,
-	postImagePublish, postImageDraft, postImageAdd, postImageEdit, postImageDelete}
+	postImagePublish, postImageDraft, postImageAdd, postImageEdit, postImageDelete,
+	postImageAddURL}
