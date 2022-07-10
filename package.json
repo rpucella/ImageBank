@@ -1,18 +1,25 @@
 {
-  "name": "ImageBank",
-  "version": "1.0.0",
+  "name": "nextjs-app",
+  "private": true,
   "scripts": {
-    "create": "node web/create.js",
-    "start": "node web/server.js",
-    "build": "cd react; yarn build",
-    "go": "cd react; yarn build; cd ..; node web/server.js"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
   },
-  "license": "CC0-1.0",
   "dependencies": {
-    "axios": "^0.21.1",
-    "express": "^4.17.1",
-    "express-busboy": "^8.0.0",
-    "sqlite3": "^5.0.0",
-    "uuid": "^8.0.0"
+    "axios": "^0.27.2",
+    "formidable": "^2.0.1",
+    "next": "12.0.8",
+    "react": "17.0.2",
+    "react-dom": "17.0.2",
+    "sqlite3": "^5.0.8",
+    "styled-components": "^5.3.3",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "babel-plugin-styled-components": "^2.0.2",
+    "eslint": "8.7.0",
+    "eslint-config-next": "12.0.8"
   }
 }
