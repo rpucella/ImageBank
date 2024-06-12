@@ -1,7 +1,9 @@
 
 import '/styles/bulma.min.css'
-
+import { useState } from 'react'
+import { useRouter } from 'next/router'
 import { createGlobalStyle } from 'styled-components'
+import { PageContext} from '/components/page-context'
 
 const GlobalStyle = createGlobalStyle`
 body {
@@ -12,10 +14,17 @@ body {
 `
 
 function MyApp({ Component, pageProps }) {
+  const [page, setPage] = useState({type: 'published', page: 1, url: '/'})
+  const router = useRouter()
+  const newSetPage = (obj) => {
+    setPage(obj)
+  }
   return (
       <>
       <GlobalStyle />
-      <Component {...pageProps} />
+        <PageContext.Provider value={[page, newSetPage]}>
+          <Component {...pageProps} />
+        </PageContext.Provider>
       </>
   )
 }

@@ -17,8 +17,8 @@ const FullPager = ({page, total, setPage}) => {
   const nextEnabled = (page < total)
   return (
   <nav className="pagination" role="navigation" aria-label="pagination">
-    <Link className="pagination-previous" onClick={prevEnabled && switchTo(page - 1)} disabled={!prevEnabled}> Previous </Link>
-    <Link className="pagination-next" onClick={nextEnabled && switchTo(page + 1)} disabled={!nextEnabled}> Next </Link>
+      <Link className="pagination-previous" onClick={prevEnabled ? switchTo(page - 1) : undefined} disabled={!prevEnabled}> Previous </Link>
+      <Link className="pagination-next" onClick={nextEnabled ? switchTo(page + 1) : undefined} disabled={!nextEnabled}> Next </Link>
     <ul className="pagination-list">
       { page > 4 && 
           <li>   
@@ -60,8 +60,8 @@ const PartialPager = ({page, total, setPage}) =>  {
   const nextEnabled = (page < total)
   return (
     <nav className="pagination" role="navigation" aria-label="pagination">
-      <Link className="pagination-previous" onClick={prevEnabled && switchTo(page - 1)} disabled={!prevEnabled}> Previous </Link>
-      <Link className="pagination-next" onClick={nextEnabled && switchTo(page + 1)} disabled={!nextEnabled}> Next </Link>
+      <Link className="pagination-previous" onClick={prevEnabled ? switchTo(page - 1) : undefined} disabled={!prevEnabled}> Previous </Link>
+      <Link className="pagination-next" onClick={nextEnabled ? switchTo(page + 1) : undefined} disabled={!nextEnabled}> Next </Link>
       <ul className="pagination-list">
 	{ Array.from(new Array(total)).map((_, i) => {
           const p = i + 1

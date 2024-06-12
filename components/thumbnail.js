@@ -1,6 +1,7 @@
 
 import styled from 'styled-components'
-import {useRouter} from 'next/router'
+import {useContext} from 'react'
+import {PageContext} from '/components/page-context'
 
 const Layout = styled.div`
   flex: 0 0 25%;
@@ -12,11 +13,11 @@ const LinkImg = styled.img`
 `
 
 export function Thumbnail ({img}) {
-  const router = useRouter()
+  const [_, setPage] = useContext(PageContext)
   return (
     <Layout>
       <LinkImg src={`/api/image/${img.uuid}`} width="100%"
-               onClick={() => router.push(`/image/${img.uuid}`)} />
+    onClick={() => setPage({type: 'image', uuid: img.uuid, url: '/'})} />
     </Layout>
   )
 }

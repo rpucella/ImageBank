@@ -1,7 +1,6 @@
-import {useState, useCallback} from 'react'
+import {useState, useCallback, useContext} from 'react'
 import styled from 'styled-components'
-import Link from 'next/link'
-import {useRouter} from 'next/router'
+import {PageContext} from '/components/page-context'
 import {Columns, Column, Content, Field, Control, Buttons, ButtonSmallDanger, ButtonSmallLink, TagSmallLink} from './bulma'
 import Api from '/services/api'
 
@@ -60,7 +59,7 @@ const Image = ({img, extended}) => {
   // Attribute extended = show buttons + dates
   const [ draft, setDraft ] = useState(img.draft)
   const [ confirmDelete, setConfirmDelete ] = useState(false)
-  const router = useRouter()
+  const [_, setPage] = useContext(PageContext)
   const deleteDialog = () => {
     setConfirmDelete(true)
   }
@@ -68,7 +67,7 @@ const Image = ({img, extended}) => {
     setConfirmDelete(false)
     await Api.postImageDelete(img.uuid)
     // get back to default?
-    router.push('/published')
+    setPage({type: 'published', page: 1, url: '/'})
   }
   const clickPublish = async () => {
     await Api.postImagePublish(img.uuid)
@@ -83,7 +82,7 @@ const Image = ({img, extended}) => {
     <Columns>
       <Column>
 	<LinkImg src={`/api/image/${img.uuid}`  /* `data:${img.mime};base64,${img.image}` */} width="100%" 
-                 onClick={() => router.push(`/image/${img.uuid}`)} />
+                 onClick={() => setPage({type: 'image', uuid: img.uuid, url: '/'})} />
       </Column>
       <Column>
         <Content>
@@ -91,14 +90,14 @@ const Image = ({img, extended}) => {
           <Field>
 	    <Control>
 	      <Buttons>
-                { extended && <Link href={`/edit/${img.uuid}`}><a className="button is-small is-link" id="button-edit">Edit</a></Link> }
+                { extended && <a className="button is-small is-link" id="button-edit" onClick={() => setPage({type: 'edit', image: img, url: '/'})}>Edit</a> }
                 { extended && draft && 
                   <ButtonSmallLink onClick={clickPublish}> Publish </ButtonSmallLink> }
                 { extended && !draft && 
                   <ButtonSmallLink onClick={clickDraft}> Draft </ButtonSmallLink> }
                 { extended && draft &&
                   <ButtonSmallDanger onClick={deleteDialog}> Delete </ButtonSmallDanger> }
-                { img.tags.map((t) => <TagSmallLink key={t} onClick={() => router.push(`/tag/${t}`)}> {t} </TagSmallLink>) }
+                { img.tags.map((t) => <TagSmallLink key={t} onClick={() => setPage({type: 'tag', tag: t, page: 1, url: '/'})}> {t} </TagSmallLink>) }
               </Buttons>
 	    </Control>
 	  </Field>

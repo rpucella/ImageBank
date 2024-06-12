@@ -38,6 +38,36 @@ class ApiImpl {
                                     {uid: uuid})
     return result
   }
+
+  async getImageData(uuid) {
+    const { data } = await axios.get(`/api/get/image?uid=${uuid}`)
+    return data
+  }
+
+  async getNewData(page) {
+    const { data } = await axios.get(`/api/get/new?page=${page}`)
+    return data
+  }
+
+  async getDraftData(page) {
+    const { data } = await axios.get(`/api/get/draft?page=${page}`)
+    return data
+  }
+
+  async getPublishedData(page) {
+    const { data } = await axios.get(`/api/get/published?page=${page}`)
+    return data
+  }
+
+  async getTagData(tag, page) {
+    const { data } = await axios.get(`/api/get/tag?tag=${tag}&page=${page}`)
+    return data
+  }
+
+  async getTagsData() {
+    const { data } = await axios.get(`/api/get/tags`)
+    return data
+  }
 }
 
 const Api = new ApiImpl()

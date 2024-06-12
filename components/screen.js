@@ -22,7 +22,7 @@ const Title = styled.div`
   margin-bottom: 16px;
 `
 
-export const Screen = ({title, pageTitle, children}) => {
+export const Screen = ({setPage, title, pageTitle, children}) => {
   const ptitle = pageTitle || title
   return (
     <>
@@ -32,7 +32,7 @@ export const Screen = ({title, pageTitle, children}) => {
       </Head>
       
       <main>
-        <Header />
+        <Header setPage={setPage}/>
         <ScreenLayout>
           <Column>
             { title && <Title>{title}</Title> }

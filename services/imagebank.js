@@ -184,6 +184,8 @@ class ImageBankImpl {
     const next = await new Images(folder).read_next(uuid)
     const tags = await new Tags(folder).read_by_uuid(uuid)
     const dtags = group_tags_by_uuid(tags)
+    console.log(image)
+    console.log(dtags)
     inject_tags(image, dtags)
     image.previous = previous?.uuid || null
     image.next = next?.uuid || null
