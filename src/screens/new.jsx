@@ -1,11 +1,11 @@
 
 import styled from 'styled-components'
-import {Screen} from 'components/screen'
-import {Thumbnail} from 'components/thumbnail'
-import {Pager} from 'components/pager'
+import {Screen} from 'src/components/screen'
+import {Thumbnail} from 'src/components/thumbnail'
+import {Pager} from 'src/components/pager'
 import {useState, useEffect} from 'react'
-import {usePageContext} from 'page-context'
-import Api from 'api'
+import {usePageContext} from 'src/page-context'
+import Api from 'src/api'
 
 const Board = styled.div`
   display: flex;
@@ -17,9 +17,11 @@ const Board = styled.div`
 export default function NewPage({page}) {
   const [newData, setNewData] = useState(null)
   const [_, setPage] = usePageContext()
-  useEffect(async () => {
-    const data = await Api.getNewData(page)
-    setNewData(data)
+  useEffect(() => {
+    (async () => {
+      const data = await Api.getNewData(page)
+      setNewData(data)
+    })()
   }, [page])
   if (!newData) {
     return null

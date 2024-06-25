@@ -1,9 +1,9 @@
 
 import {useRef} from 'react'
-import {Screen} from 'components/screen'
-import {Field, Control, ButtonLink} from 'components/bulma'
-import Api from 'api'
-import {usePageContext} from 'page-context'
+import {Screen} from 'src/components/screen'
+import {Field, Control, ButtonLink} from 'src/components/bulma'
+import Api from 'src/api'
+import {usePageContext} from 'src/page-context'
 
 export default function AddPage() {
   const [_, setPage] = usePageContext()

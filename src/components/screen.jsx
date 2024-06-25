@@ -1,7 +1,6 @@
 
 import styled from 'styled-components'
-import Head from 'next/head'
-import {Header} from 'components/header'
+import {Header} from './header'
 
 const ScreenLayout = styled.div`
   margin: 16px 40px;
@@ -26,10 +25,12 @@ export const Screen = ({setPage, title, pageTitle, children}) => {
   const ptitle = pageTitle || title
   return (
     <>
+        { /*
       <Head>
         <title>ImageBank | {ptitle}</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
+          */ }
       
       <main>
         <Header setPage={setPage}/>

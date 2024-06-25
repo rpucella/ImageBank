@@ -1,16 +1,18 @@
 
-import {Screen} from 'components/screen'
-import {Field, Control, Buttons, TagLink} from 'components/bulma'
+import {Screen} from 'src/components/screen'
+import {Field, Control, Buttons, TagLink} from 'src/components/bulma'
 import {useState, useEffect} from 'react'
-import {usePageContext} from 'page-context'
-import Api from 'api'
+import {usePageContext} from 'src/page-context'
+import Api from 'src/api'
 
 export default function TagsPage() {
   const [tagsData, setTagsData] = useState(null)
   const [_, setPage] = usePageContext()
-  useEffect(async () => {
-    const data = await Api.getTagsData()
-    setTagsData(data)
+  useEffect(() => {
+    (async () => {
+      const data = await Api.getTagsData()
+      setTagsData(data)
+    })()
   }, [])
   if (!tagsData) {
     return null

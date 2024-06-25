@@ -1,5 +1,5 @@
 
-import {Images, Tags, Version} from './dal'
+import {Images, Tags, Version} from './dal.js'
 import { v4 as uuidv4 } from 'uuid'
 import fs from 'fs'
 import axios from 'axios'

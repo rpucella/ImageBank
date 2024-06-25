@@ -1,17 +1,17 @@
-import { Screen } from 'components/screen'
-import { usePageContext } from 'page-context'
-import AddPage from 'screens/add'
-import ImagePage from 'screens/image'
-import NewPage from 'screens/new'
-import DraftPage from 'screens/draft'
-import PublishedPage from 'screens/published'
-import TagPage from 'screens/tag'
-import TagsPage from 'screens/tags'
-import EditPage from 'screens/edit'
+import { Screen } from 'src/components/screen'
+import { usePageContext } from 'src/page-context'
+import AddPage from 'src/screens/add'
+import ImagePage from 'src/screens/image'
+import NewPage from 'src/screens/new'
+import DraftPage from 'src/screens/draft'
+import PublishedPage from 'src/screens/published'
+import TagPage from 'src/screens/tag'
+import TagsPage from 'src/screens/tags'
+import EditPage from 'src/screens/edit'
 
 // move to core screen?
 
-export default function ScreenDispatch({ ctx }) {
+export default function ScreenDispatch() {
   const [page, _] = usePageContext()
   if (page.type === 'add') {
     return <AddPage />

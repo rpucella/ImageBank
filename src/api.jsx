@@ -46,15 +46,16 @@ class ApiImpl {
   }
 
   async getImageData(uuid) {
-    const formData = this.createForm({ type: 'get-image', uid: uuid})
+     const formData = this.createForm({ type: 'get-image', uid: uuid})
     const { data } = await axios.post(`/api`, formData)
     return data
   }
 
   async getImage(uuid) {
     const formData = this.createForm({ type: 'get-image-raw', uuid })
-    const { data } = await axios.post(`/api`, formData, { responseType: 'arraybuffer'})
-    return data
+    const { data } = await axios.post(`/api`, formData, { responseType: 'blob'})
+    const blob = URL.createObjectURL(new Blob([data]))
+    return blob
   }
 
   async getNewData(page) {

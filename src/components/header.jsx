@@ -1,7 +1,7 @@
 import {useState} from 'react'
 import styled from 'styled-components'
 //import addSvg from '/public//assets/add.svg'
-import {usePageContext} from 'page-context'
+import {usePageContext} from '../page-context'
 
 const Logo = styled.span`
   font-weight: bold;
@@ -13,7 +13,6 @@ const Logo = styled.span`
 export const Header = () => {
   const [showMenu, setShowMenu] = useState(false)
   const toggleMenu = () => setShowMenu(!showMenu)
-  const goTo = (dest) => () => { setShowMenu(false); navigate(dest) }
   const [_, setPage] = usePageContext()
   const go = (obj) => () => {
     setPage(obj)

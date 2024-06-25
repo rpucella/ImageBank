@@ -1,11 +1,11 @@
 
 import {useState, useEffect} from 'react'
-import {Screen} from 'components/screen'
-import {Image} from 'components/image'
-import {Columns, ColumnOneThird, Column, Field, Control, Buttons, ButtonLink, Tag} from 'components/bulma'
-import {usePageContext} from 'page-context'
-import Api from 'api'
-import {useImage} from 'use-image'
+import {Screen} from 'src/components/screen'
+import {Image} from 'src/components/image'
+import {Columns, ColumnOneThird, Column, Field, Control, Buttons, ButtonLink, Tag} from 'src/components/bulma'
+import {usePageContext} from 'src/page-context'
+import Api from 'src/api'
+import {useImage} from 'src/use-image'
 
 const TextEdit = ({value, onChange}) => {
   return <textarea className="textarea" value={value} rows={12} onChange={onChange} />
@@ -19,9 +19,11 @@ const Edit = ({img}) => {
   const [ tags, setTags ] = useState(img.tags)
   const [ dialog, setDialog ] = useState(false)
   const [ tag, setTag ] = useState('')
-  useEffect(async () => {
-    const data = await Api.getImageData(img.uuid)
-    setImageData(data)
+  useEffect(() => {
+    (async () => {
+      const data = await Api.getImageData(img.uuid)
+      setImageData(data)
+    })()
   }, [img])
   if (!imageData) {
     return null

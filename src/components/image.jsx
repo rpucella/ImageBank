@@ -1,9 +1,9 @@
 import {useState, useCallback, useEffect} from 'react'
 import styled from 'styled-components'
-import {usePageContext} from 'page-context'
+import {usePageContext} from '../page-context'
 import {Columns, Column, Content, Field, Control, Buttons, ButtonSmallDanger, ButtonSmallLink, TagSmallLink} from './bulma'
-import Api from 'api'
-import {useImage} from 'use-image'
+import Api from '../api'
+import {useImage} from '../use-image'
 
 function pad2(n) {
   return n.toString().padStart(2, '0')

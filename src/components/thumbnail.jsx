@@ -1,7 +1,7 @@
 
 import styled from 'styled-components'
-import {usePageContext} from 'page-context'
-import {useImage} from 'use-image'
+import {usePageContext} from '../page-context'
+import {useImage} from '../use-image'
 
 const Layout = styled.div`
   flex: 0 0 25%;

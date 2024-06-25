@@ -1,12 +1,13 @@
 
 import {useRef, useState, useEffect} from 'react'
-import {useEventListener} from 'use-event-listener'
-import {Screen} from 'components/screen'
-import {Image} from 'components/image'
-import {usePageContext} from 'page-context'
-import Api from 'api'
+import {useEventListener} from 'src/use-event-listener'
+import {Screen} from 'src/components/screen'
+import {Image} from 'src/components/image'
+import {usePageContext} from 'src/page-context'
+import Api from 'src/api'
 
 export default function ImagePage({uuid}) {
+  console.log('imagepage')
   const [imageData, setImageData] = useState(null)
   const goPrevious = useRef(null)
   const goNext = useRef(null)
@@ -23,13 +24,18 @@ export default function ImagePage({uuid}) {
     }
   }
   useEventListener('keydown', keyHandler)
-  useEffect(async () => {
-    const data = await Api.getImageData(uuid)
-    setImageData(data)
+  useEffect(() => {
+    (async () => {
+      const data = await Api.getImageData(uuid)
+      setImageData(data)
+    })()
   }, [uuid])
+  console.log('Made it here')
+  console.log('imageData =', imageData)
   if (!imageData) {
     return null
   }
+  console.log('past')
   const {image} = imageData
   // yuck...
   goPrevious.current = {uuid: image.previous}
@@ -46,6 +52,7 @@ export default function ImagePage({uuid}) {
     }
     setPage({type: 'image', uuid: uid, url: '/'})
   }
+  console.log('about to show stuff')
   return (
     <Screen pageTitle="Image">
       <nav className="pagination" role="navigation" aria-label="pagination">

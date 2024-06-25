@@ -1,6 +1,11 @@
+import express from 'express'
+import 'dotenv/config'
 
-import {ImageBank} from '/api/imagebank'
+import {ImageBank} from './imagebank.js'
 import formidable from 'formidable'
+
+const app = express()
+const port = 8000
 
 // Disable parsing the body as a JSON.
 export const config = {
@@ -9,8 +14,8 @@ export const config = {
   },
 }
 
-export default async function handler(req, res) {
-  const form = new formidable.IncomingForm()
+app.post('/api', async (req, res) => {
+  const form = formidable()
   form.uploadDir = '/tmp'
   form.keepExtensions = true
   form.parse(req, async (err, fields, files) => {
@@ -126,4 +131,8 @@ export default async function handler(req, res) {
       res.status(404).end()
     }
   })
-}
+})
+
+app.use(express.static('dist'))
+
+app.listen(port, () => console.log(`Listening at http://localhost:${port}`))

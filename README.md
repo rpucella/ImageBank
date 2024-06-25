@@ -10,11 +10,7 @@ Install the dependencies:
 
     yarn install
     
-To run the development server:
-
-    yarn run dev
-    
-To build the production code:
+To build the code:
 
     yarn run build
     
@@ -31,3 +27,11 @@ database by running `DDL/schema.sql` in SQLite3. You can specify which database 
 setting the environment variable `IMAGEBANK_DB_FILE` (possibly using a `.env.local` env file).
 
 
+# React + Vite
+
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+
+Currently, two official plugins are available:
+
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
