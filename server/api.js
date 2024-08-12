@@ -1,10 +1,12 @@
 import express from 'express'
 import 'dotenv/config'
+import expressWS from 'express-ws'
 
 import {ImageBank} from './imagebank.js'
 import formidable from 'formidable'
 
 const app = express()
+expressWS(app)
 const port = 8000
 
 // Disable parsing the body as a JSON.
@@ -14,36 +16,30 @@ export const config = {
   },
 }
 
-app.post('/api', async (req, res) => {
-  const form = formidable()
-  form.uploadDir = '/tmp'
-  form.keepExtensions = true
-  form.parse(req, async (err, fields, files) => {
+async function process(body) {
     ///console.log(err, fields, files)
-    const body = JSON.parse(fields.body)
+  ///const body = JSON.parse(fields.body)
     switch(body.type) {
-      
-    case 'post-add': { 
-      const upload = files.file
-      const filename = upload.originalFilename
-      const file = upload.filepath
-      const uid = await ImageBank.add_image(file, filename)
-      res.status(200).json({ uid })
-      break
+
+    case 'post-add': {
+      //const upload = files.file
+      //const filename = upload.originalFilename
+      //const file = upload.filepath
+      const file = body.file  // base64
+      const uid = await ImageBank.add_image(file)
+      return { uid }
     }
 
     case 'post-delete': {
       const {uid} = body
       await ImageBank.delete_image(uid)
-      res.status(200).json({ uid })
-      break
+      return { uid }
     }
 
     case 'post-draft': {
       const {uid} = body
       await ImageBank.draft_image(uid)
-      res.status(200).json({ uid })
-      break
+      return { uid }
     }
 
     case 'post-edit': {
@@ -51,22 +47,19 @@ app.post('/api', async (req, res) => {
       const ntags = tags ? tags.split(' ;; ') : []
       const ntext = text.replace(/\r/g, '').split('\n\n').map(t => t.trim());
       await ImageBank.edit_image(uid, ntext, ntags)
-      res.status(200).json({ uid })
-      break
+      return { uid }
     }
 
     case 'post-publish': {
       const {uid} = body
       await ImageBank.publish_image(uid)
-      res.status(200).json({ uid })
-      break
+      return { uid }
     }
 
     case 'post-url': {
       const {url} = body
       const uid = await ImageBank.add_image_url(url)
-      res.status(200).json({ uid })
-      break
+      return { uid }
     }
 
     case 'get-draft': {
@@ -74,64 +67,87 @@ app.post('/api', async (req, res) => {
       const results = await ImageBank.drafts(page)
       const count = await ImageBank.count_drafts()
       const total_pages = Math.trunc((count - 1) / 10) + 1
-      res.status(200).json({ images: results, total: total_pages })
-      break
+      return { images: results, total: total_pages }
     }
-      
+
     case 'get-image': {
       const {uid} = body
       const image = await ImageBank.image(uid)
-      res.status(200).json({ image })
-      break
+      return { image }
     }
-      
+
     case 'get-image-raw': {
-      const {uuid} = body
-      const img = await ImageBank.image(uuid, true)
-      res.setHeader('Content-Type', img.mime)
-      res.status(200).end(img.image)
-      break
+      const {uid} = body
+      const img = await ImageBank.image(uid, true)
+      const base64Image = Buffer.from(img.image).toString('base64')
+      return { image: `data:${img.mime};base64,${base64Image}` }
     }
-      
+
     case 'get-new': {
       const page = parseInt(body.page)
       const results = await ImageBank.drafts_new(page)
       const count = await ImageBank.count_new()
       const total_pages = Math.trunc((count - 1) / 16) + 1
-      res.status(200).json({ images: results, total: total_pages })
+      return { images: results, total: total_pages }
       break
     }
-      
+
     case 'get-published': {
       const page = parseInt(body.page)
       const results = await ImageBank.page(page)
       const count = await ImageBank.count()
       const total_pages = Math.trunc((count - 1) / 10) + 1
-      res.status(200).json({ images: results, total: total_pages })
-      break
+      return { images: results, total: total_pages }
     }
-      
+
     case 'get-tag': {
       const tag = body.tag
       const page = parseInt(body.page)
       const results = await ImageBank.tag(tag, page)
       const count = await ImageBank.count_tag(tag)
       const total_pages = Math.trunc((count - 1) / 10) + 1
-      res.status(200).json({ images: results, total: total_pages })
-      break
+      return { images: results, total: total_pages }
     }
-      
+
     case 'get-tags': {
       const results = await ImageBank.tags_all()
-      res.status(200).json({ tags: results })
-      break
+      return { tags: results }
     }
-      
-    default: 
+
+    default:
+      return null
+    }
+}
+
+app.post('/api', async (req, res) => {
+  const form = formidable()
+  form.uploadDir = '/tmp'
+  form.keepExtensions = true
+  form.parse(req, async (err, fields, files) => {
+    const body = JSON.parse(fields.body)
+    const result = await process(body)
+    if (result) {
+       res.status(200).json(result)
+    } else {
       res.status(404).end()
     }
   })
 })
+
+app.ws('/api', async (ws, req) => {
+  ws.on('message', async (msg) => {
+    ///console.log('received', msg)
+    const obj = JSON.parse(msg)
+    const callId = obj.callId
+    ///console.log(obj)
+    const result = await process(obj)
+    ///console.log('`------------------------------------------------------------')
+    ///console.log('sending', result)
+    ws.send(JSON.stringify({...result, callId}))
+  })
+  ///console.log('creating socket')
+})
+
 
 app.use(express.static('dist'))
 

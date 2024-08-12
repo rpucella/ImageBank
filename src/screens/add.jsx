@@ -5,6 +5,22 @@ import {Field, Control, ButtonLink} from 'src/components/bulma'
 import Api from 'src/api'
 import {usePageContext} from 'src/page-context'
 
+const convertBase64 = (file) => {
+  return new Promise((resolve, reject) => {
+    const fileReader = new FileReader();
+    fileReader.readAsDataURL(file);
+
+    fileReader.onload = () => {
+      resolve(fileReader.result);
+    };
+
+    fileReader.onerror = (error) => {
+      reject(error);
+    };
+  });
+};
+
+
 export default function AddPage() {
   const [_, setPage] = usePageContext()
   const inputEl = useRef(null)
@@ -15,12 +31,14 @@ export default function AddPage() {
       return
     }
     if (files.length === 1) {
-      const { uid } = await Api.postImageAdd(files[0])
+      const fileObj = await convertBase64(files[0])
+      const { uid } = await Api.postImageAdd(fileObj)
       setPage({type: 'image', uuid: uid, url: '/'})
     }
     else { 
       for (let i = 0; i < files.length; i++) {
-        await Api.postImageAdd(files[i])
+        const fileObj = await convertBase64(files[i])
+        await Api.postImageAdd(fileObj)
       }
       setPage({type: 'new', page: 1, url: '/'})
     }

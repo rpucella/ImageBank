@@ -7,7 +7,7 @@ import {usePageContext} from 'src/page-context'
 import Api from 'src/api'
 
 export default function ImagePage({uuid}) {
-  console.log('imagepage')
+  ///console.log('imagepage')
   const [imageData, setImageData] = useState(null)
   const goPrevious = useRef(null)
   const goNext = useRef(null)
@@ -30,12 +30,10 @@ export default function ImagePage({uuid}) {
       setImageData(data)
     })()
   }, [uuid])
-  console.log('Made it here')
-  console.log('imageData =', imageData)
+  ///console.log('imageData =', imageData)
   if (!imageData) {
     return null
   }
-  console.log('past')
   const {image} = imageData
   // yuck...
   goPrevious.current = {uuid: image.previous}
@@ -52,7 +50,6 @@ export default function ImagePage({uuid}) {
     }
     setPage({type: 'image', uuid: uid, url: '/'})
   }
-  console.log('about to show stuff')
   return (
     <Screen pageTitle="Image">
       <nav className="pagination" role="navigation" aria-label="pagination">

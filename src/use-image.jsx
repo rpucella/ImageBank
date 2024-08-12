@@ -6,7 +6,7 @@ export const useImage = (img) => {
   useEffect(() => {
     (async () => {
       const data = await Api.getImage(img.uuid)
-      setData(data)   // `data:${img.mime};base64,${Buffer.from(data).toString('base64')}`)
+      setData(data.image)   // `data:${img.mime};base64,${Buffer.from(data).toString('base64')}`)
     }) ()
   }, [img])
   return data

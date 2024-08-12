@@ -254,33 +254,38 @@ class ImageBankImpl {
     }
   }
 
-  async add_image (file, filename) {
+  async add_image (fileObj) {
     const folder = this._fname
     if (!folder) { 
       throw Error("IMAGEBANK_DB_FILE not defined or empty")
     }
-    const f = filename.trim()
+//    const f = filename.trim()
     const uuid = uuidv4()
-    const m = f.match(/.*\.([^.]*)$/)
-    const extension = m[1]
-    let contentType
-    for (const ct of Object.keys(MIME_EXTENSIONS)) {
-      if (MIME_EXTENSIONS[ct].includes(extension)) {
-        contentType = ct
-        break
-      }
+    const dataUri = /data:(.*);base64,(.*)/
+    const match = fileObj.match(dataUri)
+    if (match) {
+      const contentType = match[1]
+      const base64 = match[2]
+      ///console.log(base64)
+      /*
+      for (const ct of Object.keys(MIME_EXTENSIONS)) {
+        if (MIME_EXTENSIONS[ct].includes(extension)) {
+          contentType = ct
+          break
+        }
+        }
+      */
+      //const image = fs.readFileSync(file)
+      const image = Buffer.from(base64, 'base64')
+      await new Images(folder).create({'uuid': uuid,
+				       'mime': contentType,
+                                       'image': image,
+				       'content': [],
+				       'draft': true})
+      return uuid
     }
-    if (!contentType) {
-      console.log(`Unrecognized extension ${extension}`)
-      throw `Unrecognized extension ${extension}`
-    }
-    const image = fs.readFileSync(file)
-    await new Images(folder).create({'uuid': uuid,
-				         'mime': contentType,
-                                         'image': image,
-				         'content': [],
-				         'draft': true})
-    return uuid
+    console.log(`Unrecognized data URI`)
+    throw `Unrecognized extension ${extension}`
   }
 
   async add_image_url (url) {

@@ -31,7 +31,7 @@ export default function NewPage({page}) {
     setPage({type: 'new', page: p, url: '/'})
   }
   return (
-        <Screen title={'New'}>
+        <Screen title={'Image Bank'}>
             <Pager page={page} setPage={go} total={total} />
 	    <Board>  
               { images.map((img) => <Thumbnail key={img.uuid} img={img} />) }

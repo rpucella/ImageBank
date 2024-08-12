@@ -23,7 +23,7 @@ export default function PublishedPage({ page }) {
     setPage({type: 'published', page: p, url: '/'})
   }
   return (
-        <Screen title={'Published'}>
+        <Screen title={'Completed'}>
           <Pager page={page} setPage={go} total={total} />
           { images.map((img) => <Image key={img.uuid} img={img} />) }
           <Pager page={page} setPage={go} total={total} />

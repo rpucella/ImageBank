@@ -33,9 +33,9 @@ export const Header = () => {
       
       <div id="navbarMenu" className={showMenu ? "navbar-menu is-active" : "navbar-menu"}>
         <div className="navbar-start">
-          <a  className="navbar-item" onClick={go({type: 'published', page: 1, url: '/'})}>Published</a>
+          <a  className="navbar-item" onClick={go({type: 'published', page: 1, url: '/'})}>Completed</a>
           <a  className="navbar-item" onClick={go({type: 'draft', page: 1, url: '/'})}>Drafts</a>
-          <a  className="navbar-item" onClick={go({type: 'new', page: 1, url: '/'})}>New</a>
+          <a  className="navbar-item" onClick={go({type: 'new', page: 1, url: '/'})}>Bank</a>
           <a  className="navbar-item" onClick={go({type: 'tags', url: '/'})}>Tags</a>
           <a  className="navbar-item" onClick={go({type: 'add', url: '/'})}><span><img src="/assets/add.svg" height="12" width="12" /> Image</span></a>
         </div>
