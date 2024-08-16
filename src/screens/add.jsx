@@ -2,8 +2,8 @@
 import {useRef} from 'react'
 import {Screen} from 'src/components/screen'
 import {Field, Control, ButtonLink} from 'src/components/bulma'
-import Api from 'src/api'
 import {usePageContext} from 'src/page-context'
+import {useApiContext} from 'src/api-context'
 
 const convertBase64 = (file) => {
   return new Promise((resolve, reject) => {
@@ -23,6 +23,7 @@ const convertBase64 = (file) => {
 
 export default function AddPage() {
   const [_, setPage] = usePageContext()
+  const Api = useApiContext()
   const inputEl = useRef(null)
   const urlEl = useRef(null)
   const clickSave = async () => {

@@ -2,7 +2,7 @@ import {useState, useCallback, useEffect} from 'react'
 import styled from 'styled-components'
 import {usePageContext} from '../page-context'
 import {Columns, Column, Content, Field, Control, Buttons, ButtonSmallDanger, ButtonSmallLink, TagSmallLink} from './bulma'
-import Api from '../api'
+import {useApiContext} from 'src/api-context'
 import {useImage} from '../use-image'
 
 function pad2(n) {
@@ -62,6 +62,7 @@ const Image = ({img, extended}) => {
   const [ draft, setDraft ] = useState(img.draft)
   const [ confirmDelete, setConfirmDelete ] = useState(false)
   const [_, setPage] = usePageContext()
+  const Api = useApiContext()
   const deleteDialog = () => {
     setConfirmDelete(true)
   }

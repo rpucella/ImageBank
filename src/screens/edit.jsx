@@ -4,7 +4,7 @@ import {Screen} from 'src/components/screen'
 import {Image} from 'src/components/image'
 import {Columns, ColumnOneThird, Column, Field, Control, Buttons, ButtonLink, Tag} from 'src/components/bulma'
 import {usePageContext} from 'src/page-context'
-import Api from 'src/api'
+import {useApiContext} from 'src/api-context'
 import {useImage} from 'src/use-image'
 
 const TextEdit = ({value, onChange}) => {
@@ -15,6 +15,7 @@ const Edit = ({img}) => {
   const imageSrc = useImage(img)
   const [imageData, setImageData] = useState(null)
   const [_, setPage] = usePageContext()
+  const Api = useApiContext()
   const [ text, setText ] = useState(img.content.join('\n\n'))
   const [ tags, setTags ] = useState(img.tags)
   const [ dialog, setDialog ] = useState(false)

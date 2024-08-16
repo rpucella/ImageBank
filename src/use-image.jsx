@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react'
-import Api from 'src/api'
+import {useApiContext} from 'src/api-context'
 
 export const useImage = (img) => {
   const [data, setData] = useState(null)
+  const Api = useApiContext()
   useEffect(() => {
     (async () => {
       const data = await Api.getImage(img.uuid)

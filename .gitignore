@@ -42,3 +42,14 @@ yarn-error.log*
 # vercel
 .vercel
 /.env
+/neutralino/.tmp/
+/neutralino/frontend/dist/
+/.tmp/
+/bin/
+/neutralino/.env
+/neutralinojs.log
+/neutralino/OLD/dist
+/OLD/neutralino/dist
+OLD/neutralino/OLD/dist
+OLD/neutralino/frontend/dist
+OLD/neutralino/.tmp

@@ -4,7 +4,7 @@ import {useEventListener} from 'src/use-event-listener'
 import {Screen} from 'src/components/screen'
 import {Image} from 'src/components/image'
 import {usePageContext} from 'src/page-context'
-import Api from 'src/api'
+import {useApiContext} from 'src/api-context'
 
 export default function ImagePage({uuid}) {
   ///console.log('imagepage')
@@ -12,6 +12,7 @@ export default function ImagePage({uuid}) {
   const goPrevious = useRef(null)
   const goNext = useRef(null)
   const [_, setPage] = usePageContext()
+  const Api = useApiContext()
   const keyHandler = ({key}) => {
     // Flip arrows so that right goes to "previous" and left goes to "next"
     // because previous and next refer to time, and we want order in the New

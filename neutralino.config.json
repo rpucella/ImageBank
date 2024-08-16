@@ -1,0 +1,73 @@
+{
+  "$schema": "https://raw.githubusercontent.com/neutralinojs/neutralinojs/main/schemas/neutralino.config.schema.json",
+  "applicationId": "imagebank",
+  "version": "1.0.0",
+  "defaultMode": "window",
+  "port": 0,
+  "documentRoot": "/dist/",
+  "url": "/index-neutralino.html",
+  "enableServer": true,
+  "enableNativeAPI": true,
+  "tokenSecurity": "one-time",
+  "enableExtensions": true,
+  "exportAuthInfo": false,
+  "logging": {
+    "enabled": true,
+    "writeToLogFile": true
+  },
+  "extensions": [
+    {
+      "id": "imagebank_backend",
+      "command": "node ${NL_PATH}/server/server-neutralino.js"
+    }
+  ],
+  "nativeAllowList": [
+    "app.*",
+    "os.*",
+    "debug.log",
+    "extensions.*"
+  ],
+  "globalVariables": {},
+  "modes": {
+    "window": {
+      "title": "ImageBank",
+      "width": 1600,
+      "height": 1200,
+      "center": true,
+      "fullScreen": false,
+      "alwaysOnTop": false,
+      "icon": "/dist/assets/add.svg",
+      "enableInspector": true,
+      "borderless": false,
+      "maximize": false,
+      "hidden": false,
+      "resizable": true,
+      "exitProcessOnClose": false
+    },
+    "browser": {
+      "globalVariables": {
+        "TEST": "Test value browser"
+      },
+      "nativeBlockList": [
+        "filesystem.*"
+      ]
+    },
+    "chrome": {
+      "width": 1200,
+      "height": 800,
+      "args": "--user-agent=\"Neutralinojs chrome mode\"",
+      "nativeBlockList": [
+        "filesystem.*",
+        "os.*"
+      ]
+    }
+  },
+  "cli": {
+    "binaryName": "imagebank",
+    "resourcesPath": "/dist/",
+    "extensionsPath": "/",
+    "binaryVersion": "5.4.0",
+    "clientVersion": "5.4.0",
+    "distributionPath": "/build"
+  }
+}

@@ -6,11 +6,16 @@
   "scripts": {
     "donotuse:dev": "vite",
     "build": "vite build",
+    "build-neutralino": "vite build --config vite-neutralino.config.js",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "start": "node server/api.js"
+    "start": "node server/server.js",
+    "neutralino-run": "neu run",
+    "neutralino-build": "vite build --config vite-neutralino.config.js; neu build"
   },
   "dependencies": {
+    "@neutralinojs/lib": "^5.4.0",
+    "@neutralinojs/neu": "^11.3.0",
     "axios": "^1.7.2",
     "buffer": "^6.0.3",
     "dotenv": "^16.4.5",
