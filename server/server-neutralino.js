@@ -1,5 +1,4 @@
 import express from 'express'
-import 'dotenv/config'
 import expressWS from 'express-ws'
 
 import {ImageBank} from './imagebank.js'

@@ -4,7 +4,8 @@ import { v4 as uuidv4 } from 'uuid'
 import fs from 'fs'
 import axios from 'axios'
 
-const FOLDER = process.env.IMAGEBANK_DB_FILE
+// Source of pictures. Make it a symlink to host it somewhere else.
+const FOLDER = `${process.env.HOME}/.config/imagebank/images.db`
 
 const MIME_EXTENSIONS = {
   'image/jpeg': ['jpeg', 'jpg'],

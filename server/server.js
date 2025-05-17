@@ -1,5 +1,4 @@
 import express from 'express'
-import 'dotenv/config'
 import expressWS from 'express-ws'
 
 import {ImageBank} from './imagebank.js'
@@ -151,4 +150,5 @@ app.ws('/api', async (ws, req) => {
 
 app.use(express.static('dist'))
 
+// Optionally fire up the browser?
 app.listen(port, () => console.log(`Listening at http://localhost:${port}`))
