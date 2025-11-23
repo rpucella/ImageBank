@@ -4,6 +4,7 @@
 /dist
 /dist-ui
 /node_modules
+/resources
 
 .storage
 *.log
