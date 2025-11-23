@@ -2,6 +2,7 @@ import {useState} from 'react'
 import styled from 'styled-components'
 //import addSvg from '/public//assets/add.svg'
 import {usePageContext} from '../page-context'
+import addSVG from "../add.svg"
 
 const Logo = styled.span`
   font-weight: bold;
@@ -37,7 +38,7 @@ export const Header = () => {
           <a  className="navbar-item" onClick={go({type: 'draft', page: 1, url: '/'})}>Drafts</a>
           <a  className="navbar-item" onClick={go({type: 'new', page: 1, url: '/'})}>Bank</a>
           <a  className="navbar-item" onClick={go({type: 'tags', url: '/'})}>Tags</a>
-          <a  className="navbar-item" onClick={go({type: 'add', url: '/'})}><span><img src="/assets/add.svg" height="12" width="12" /> Image</span></a>
+            <a  className="navbar-item" onClick={go({type: 'add', url: '/'})}><span><img src={addSVG} height="12" width="12" /> Image</span></a>
         </div>
       </div>
     </nav>

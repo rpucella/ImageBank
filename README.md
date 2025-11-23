@@ -6,32 +6,25 @@ a personal project.
 
 ## To Build
 
+This code has only been tested on Mac OS (arm64).
+
 Install the dependencies:
 
-    yarn install
+    make install
     
 To build the code:
 
-    yarn run build
+    make
     
-To start the production server:
+This will build the application in `dist/imagebank/`. To run the appropriate binary, use:
 
-    yarn run start
+    ./dist/imagebank/imagebank-<arch>
 
-By default, using port 3000 — to specify a port:
-
-    yarn run start -p <port>
-    
 Running the app requires a SQLite3 database file containing the images. You can initialize a
-database by running `DDL/schema.sql` in SQLite3. You can specify which database the app should use by
-setting the environment variable `IMAGEBANK_DB_FILE` (possibly using a `.env.local` env file).
+database by running `DDL/schema.sql` in SQLite3. The database needs to live in 
+
+    ~/.config/imagebank/images.db
 
 
-# React + Vite
+## (To come: Mac OS bundler)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
-
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh

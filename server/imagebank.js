@@ -7,6 +7,9 @@ import axios from 'axios'
 // Source of pictures. Make it a symlink to host it somewhere else.
 const FOLDER = `${process.env.HOME}/.config/imagebank/images.db`
 
+const BOARD_SIZE = 4
+const LIST_SIZE = 5
+
 const MIME_EXTENSIONS = {
   'image/jpeg': ['jpeg', 'jpg'],
   'image/png': ['png']
@@ -63,8 +66,8 @@ class ImageBankImpl {
     if (!folder) { 
       throw Error("IMAGEBANK_DB_FILE not defined or empty")
     }
-    const offset = (p - 1) * 10
-    const results = await new Images(folder).read_all_drafts(offset, 10)
+    const offset = (p - 1) * LIST_SIZE
+    const results = await new Images(folder).read_all_drafts(offset, LIST_SIZE)
     const tags = await new Tags(folder).read_by_uuids(results.map(r => r.uuid))
     const dtags = group_tags_by_uuid(tags)
     for (let r of results) {
@@ -81,8 +84,8 @@ class ImageBankImpl {
     if (!folder) { 
       throw Error("IMAGEBANK_DB_FILE not defined or empty")
     }
-    const offset = (p - 1) * 16
-    const results = await new Images(folder).read_all_new(offset, 16)
+    const offset = (p - 1) * BOARD_SIZE
+    const results = await new Images(folder).read_all_new(offset, BOARD_SIZE)
     const tags = await new Tags(folder).read_by_uuids(results.map(r => r.uuid))
     const dtags = group_tags_by_uuid(tags)
     for (let r of results) {
@@ -135,8 +138,8 @@ class ImageBankImpl {
     if (!folder) { 
       throw Error("IMAGEBANK_DB_FILE not defined or empty")
     }
-    const offset = (p - 1) * 10
-    const results = await new Images(folder).read_all(offset, 10)
+    const offset = (p - 1) * LIST_SIZE
+    const results = await new Images(folder).read_all(offset, LIST_SIZE)
     const tags = await new Tags(folder).read_by_uuids(results.map(r => r.uuid))
     const dtags = group_tags_by_uuid(tags)
     for (let r of results) {
@@ -162,8 +165,8 @@ class ImageBankImpl {
     if (!folder) { 
       throw Error("IMAGEBANK_DB_FILE not defined or empty")
     }
-    const offset = (p - 1) * 10
-    const results = await new Images(folder).read_all_by_tag(t, offset, 10)
+    const offset = (p - 1) * LIST_SIZE
+    const results = await new Images(folder).read_all_by_tag(t, offset, LIST_SIZE)
     const tags = await new Tags(folder).read_by_uuids(results.map(r => r.uuid))
     const dtags = group_tags_by_uuid(tags)
     for (let r of results) {

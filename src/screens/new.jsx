@@ -37,7 +37,7 @@ export default function NewPage({page}) {
 	    <Board>  
               { images.map((img) => <Thumbnail key={img.uuid} img={img} />) }
 	    </Board>
-            <Pager page={page} setPage={go} total={total} />
+            { /* <Pager page={page} setPage={go} total={total} /> */ }
         </Screen>
   )
 }

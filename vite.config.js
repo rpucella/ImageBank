@@ -1,9 +1,10 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import neutralino from 'vite-plugin-neutralino';
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react(), neutralino()],
   resolve: {
     alias: {
       src: "/src"
@@ -13,6 +14,7 @@ export default defineConfig({
     rollupOptions: {
       input: "index.html"
     },
-    minify: false
+    minify: false,
+    outDir: "dist-ui"
   }
 })

@@ -1,12 +1,11 @@
-import express from 'express'
-import expressWS from 'express-ws'
-
 import {ImageBank} from './imagebank.js'
 import {v4 as uuidv4} from 'uuid'
 import formidable from 'formidable'
 
 import process from 'process'
 import fs from 'fs'
+import WebSocket from 'ws'
+
 const processInput = JSON.parse(fs.readFileSync(process.stdin.fd, 'utf-8'))
 const NL_PORT = processInput.nlPort
 const NL_TOKEN = processInput.nlToken
@@ -14,13 +13,7 @@ const NL_CTOKEN = processInput.nlConnectToken
 const NL_EXTID = processInput.nlExtensionId
 const NL_URL =  `ws://localhost:${NL_PORT}?extensionId=${NL_EXTID}&connectToken=${NL_CTOKEN}`
 
-///console.log(processInput)
-
-///console.log(NL_URL)
-
 async function processMsg(body) {
-    ///console.log(err, fields, files)
-  ///const body = JSON.parse(fields.body)
     switch(body.type) {
 
     case 'post-add': {
@@ -121,40 +114,9 @@ async function processMsg(body) {
     }
 }
 
-/*
-app.post('/api', async (req, res) => {
-  const form = formidable()
-  form.uploadDir = '/tmp'
-  form.keepExtensions = true
-  form.parse(req, async (err, fields, files) => {
-    const body = JSON.parse(fields.body)
-    const result = await processMsg(body)
-    if (result) {
-       res.status(200).json(result)
-    } else {
-      res.status(404).end()
-    }
-  })
-})
-
-app.ws('/api', async (ws, req) => {
-  ws.on('message', async (msg) => {
-    ///console.log('received', msg)
-    const obj = JSON.parse(msg)
-    const callId = obj.callId
-    ///console.log(obj)
-    const result = await processMsg(obj)
-    ///console.log('`------------------------------------------------------------')
-    ///console.log('sending', result)
-    ws.send(JSON.stringify({...result, callId}))
-  })
-  ///console.log('creating socket')
-})
-*/
-
 // From https://neutralino.js.org/docs/how-to/extensions-overview
 
-import WebSocket from 'ws'
+console.log(`Connecting to ${NL_URL}`)
 
 const client = new WebSocket(NL_URL)
 
@@ -162,13 +124,12 @@ client.on('error', (error) => {
     log(`Connection error!`, "ERROR")
     console.dir(error, {depth:null})
 })
-client.on('open', () => log("Connected"))
+client.on('open', () => log(`Connected`))
 client.on('close', (code, reason) => {
   log(`WebSocket closed: ${code} - ${reason}`);
   process.exit()
 })
 client.on('message', async (evt) => {
-  ///console.log("GOT HERE!")
   const evtData = evt.toString('utf-8')
   const { event, data } = JSON.parse(evtData)
 

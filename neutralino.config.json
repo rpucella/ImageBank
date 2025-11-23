@@ -1,30 +1,25 @@
 {
   "$schema": "https://raw.githubusercontent.com/neutralinojs/neutralinojs/main/schemas/neutralino.config.schema.json",
-  "applicationId": "imagebank",
+    "applicationName": "ImageBank",
+    "applicationId": "github.com/rpucella/imagebank",
   "version": "1.0.0",
   "defaultMode": "window",
   "port": 0,
-  "documentRoot": "/dist/",
-  "url": "/index-neutralino.html",
+  "documentRoot": "/resources/",
+  "url": "/",
   "enableServer": true,
+  "enableExtensions": true,
   "enableNativeAPI": true,
   "tokenSecurity": "one-time",
-  "enableExtensions": true,
-  "exportAuthInfo": false,
   "logging": {
     "enabled": true,
     "writeToLogFile": true
   },
-  "extensions": [
-    {
-      "id": "imagebank_backend",
-      "command": "node ${NL_PATH}/server/server-neutralino.js"
-    }
-  ],
   "nativeAllowList": [
     "app.*",
     "os.*",
     "debug.log",
+    "window.*",
     "extensions.*"
   ],
   "globalVariables": {},
@@ -33,10 +28,13 @@
       "title": "ImageBank",
       "width": 1600,
       "height": 1200,
+      "minWidth": 1200,
+      "minHeight": 800,
       "center": true,
       "fullScreen": false,
       "alwaysOnTop": false,
-      "icon": "/dist/assets/add.svg",
+      "icon": "/resources/icons/appIcon.png",
+      "_icon": "/dist/assets/add.svg",
       "enableInspector": true,
       "borderless": false,
       "maximize": false,
@@ -45,16 +43,20 @@
       "exitProcessOnClose": false
     },
     "browser": {
-      "globalVariables": {
-        "TEST": "Test value browser"
-      },
+      "globalVariables": {},
       "nativeBlockList": [
         "filesystem.*"
       ]
     },
+    "cloud": {
+      "url": "/resources/#cloud",
+      "nativeAllowList": [
+        "app.*"
+      ]
+    },
     "chrome": {
-      "width": 1200,
-      "height": 800,
+      "width": 800,
+      "height": 500,
       "args": "--user-agent=\"Neutralinojs chrome mode\"",
       "nativeBlockList": [
         "filesystem.*",
@@ -64,10 +66,29 @@
   },
   "cli": {
     "binaryName": "imagebank",
-    "resourcesPath": "/dist/",
-    "extensionsPath": "/",
-    "binaryVersion": "5.4.0",
-    "clientVersion": "5.4.0",
-    "distributionPath": "/build"
+    "resourcesPath": "/resources/",
+    "extensionsPath": "/extensions/",
+    "clientLibrary": "/resources/js/neutralino.js",
+    "binaryVersion": "6.3.0",
+    "clientVersion": "6.3.0"
+  },
+  "extensions": [
+    {
+      "id": "imagebank_backend",
+      "command": "node ${NL_PATH}/server/server-neutralino.js",
+      "__command": "${NL_PATH}/../MacOS/backend"
+    }
+  ],
+  "buildScript": {
+    "mac": {
+      "architecture": [
+        "arm64"
+      ],
+      "minimumOS": "10.13.0",
+      "appName": "ImageBank",
+      "appBundleName": "ImageBank",
+      "appIdentifier": "github.com/rpucella/imagebank",
+      "appIcon": "resources/icons/appIcon.png"
+    }
   }
 }

@@ -1,55 +1,10 @@
+
 *~
-node_modules/
-*.pyc
-/run.sh
-/ignore/
-.DS_Store
-/dist/
-/start
 
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
-
-# dependencies
+/dist
+/dist-ui
 /node_modules
-/.pnp
-.pnp.js
 
-# testing
-/coverage
-
-# next.js
-/.next/
-/out/
-
-# production
-/build
-
-# misc
+.storage
+*.log
 .DS_Store
-*.pem
-
-# debug
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-# local env files
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-
-# vercel
-.vercel
-/.env
-/neutralino/.tmp/
-/neutralino/frontend/dist/
-/.tmp/
-/bin/
-/neutralino/.env
-/neutralinojs.log
-/neutralino/OLD/dist
-/OLD/neutralino/dist
-OLD/neutralino/OLD/dist
-OLD/neutralino/frontend/dist
-OLD/neutralino/.tmp

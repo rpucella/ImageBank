@@ -12,7 +12,9 @@ import EditPage from 'src/screens/edit'
 // move to core screen?
 
 export default function ScreenDispatch() {
+    console.log('dispatching!')
   const [page, _] = usePageContext()
+    console.log(page)
   if (page.type === 'add') {
     return <AddPage />
   } else if (page.type === 'image') {

@@ -13,6 +13,7 @@ class Api {
     if (!this._callObj) {
       this._callObj = new this._Call()
     }
+      console.log(`calling ${url} with ${args}`)
     return this._callObj.call(url, args)
   }
 
